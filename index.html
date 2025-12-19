@@ -7,40 +7,131 @@
   <style>
     body { font-family: Arial, Helvetica, sans-serif; margin: 24px; color: #111; }
     .wrap { max-width: 1040px; }
+
+    .intro {
+      margin: 0 0 14px 0;
+      line-height: 1.45;
+      font-size: 15px;
+      color: #222;
+    }
+    .intro a { color: #0b65c2; text-decoration: none; }
+    .intro a:hover { text-decoration: underline; }
+
+    h2 { margin-bottom: 10px; }
+
     .row { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; align-items: end; }
     .col { flex: 1 1 420px; }
+
+    .section-title {
+      margin-top: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+    }
+    .section-subtitle {
+      margin-top: 2px;
+      font-size: 14px;
+      color: #333;
+    }
+
     label { display: block; font-size: 14px; margin-bottom: 6px; }
-    input[type="text"], select {
+    input[type="text"]{
       width: 100%; padding: 10px 12px; font-size: 16px;
       border: 1px solid #ccc; border-radius: 8px; background: #fff;
     }
+
+    .radio-group {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+    }
+    .radio-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fff;
+    }
+    .radio-item input[type="radio"] {
+      margin-top: 3px;
+      transform: scale(1.05);
+    }
+    .radio-label {
+      display: grid;
+      gap: 2px;
+    }
+    .radio-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: #111;
+    }
+    .radio-pair {
+      font-size: 13px;
+      color: #333;
+      line-height: 1.35;
+    }
+
     button {
       padding: 10px 14px; font-size: 16px; cursor: pointer;
       border: 1px solid #ccc; border-radius: 8px; background: #fff;
     }
     button:active { transform: translateY(1px); }
+
     canvas { width: 100%; border: 1px solid #ddd; border-radius: 12px; display: block; }
-    .links { margin-top: 10px; font-size: 14px; }
-    .links a { color: #0b65c2; text-decoration: none; }
-    .links a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <h2>YES/NO Sticker Generator</h2>
 
-    <div class="row">
-      <div class="col">
-        <label for="presetSelect">Presets</label>
-        <select id="presetSelect">
-          <option value="">Select a preset…</option>
-          <option value="diamond">Diamond OA vs paywalls/APCs</option>
-          <option value="nonprofit">Non-profit vs publisher profit</option>
-          <option value="paywalls">Open access science vs paywalls after free work</option>
-          <option value="spam">Constructive review vs automated invitations</option>
-        </select>
+    <p class="intro">
+      This YES/NO image generator helps researchers respond quickly and clearly to unwanted review requests, including automated mass invitations, predatory journals, and high-fee for-profit publishers that rely on unpaid reviewing and often place accepted papers behind paywalls.
+      <br><br>
+      Made by Eelke de Vries:
+      <a href="https://www.linkedin.com/in/eelkedevries" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/eelkedevries</a>,
+      <a href="https://github.com/eelkedevries" target="_blank" rel="noopener noreferrer">https://github.com/eelkedevries</a>.
+    </p>
+
+    <div class="section-title">Select the kind of review invitation you received.</div>
+
+    <div class="radio-group" role="radiogroup" aria-label="Select the kind of review invitation you received">
+      <div class="radio-item">
+        <input type="radio" id="preset_forprofit" name="preset" value="forprofit" />
+        <div class="radio-label">
+          <div class="radio-name">For-profit publishers</div>
+          <div class="radio-pair">
+            <strong>NO:</strong> Peer review for paywalls and APCs<br>
+            <strong>YES:</strong> Peer review for diamond open access
+          </div>
+        </div>
+      </div>
+
+      <div class="radio-item">
+        <input type="radio" id="preset_predatory" name="preset" value="predatory" />
+        <div class="radio-label">
+          <div class="radio-name">Predatory publishers</div>
+          <div class="radio-pair">
+            <strong>NO:</strong> Predatory publishing practices<br>
+            <strong>YES:</strong> Legitimate academic journals
+          </div>
+        </div>
+      </div>
+
+      <div class="radio-item">
+        <input type="radio" id="preset_automated" name="preset" value="automated" />
+        <div class="radio-label">
+          <div class="radio-name">Automated review invitations</div>
+          <div class="radio-pair">
+            <strong>NO:</strong> Automated review invitations<br>
+            <strong>YES:</strong> Legitimate editorial requests
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="section-title">Or enter your personal message</div>
 
     <div class="row">
       <div class="col">
@@ -60,14 +151,7 @@
       <button id="clearAllBtn">Clear all</button>
     </div>
 
-    <!-- Live preview (fixed 1800x360; CSS scales it to fit) -->
     <canvas id="c" width="1800" height="360"></canvas>
-
-    <div class="links">
-      <a href="https://www.linkedin.com/in/eelkedevries" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      &nbsp;|&nbsp;
-      <a href="https://github.com/eelkedevries/" target="_blank" rel="noopener noreferrer">GitHub</a>
-    </div>
   </div>
 
   <script>
@@ -75,16 +159,17 @@
     const canvas = document.getElementById("c");
     const ctx = canvas.getContext("2d");
 
-    const presetSelect = document.getElementById("presetSelect");
     const noInput = document.getElementById("noText");
     const yesInput = document.getElementById("yesText");
+
+    const presetRadios = Array.from(document.querySelectorAll('input[name="preset"]'));
 
     const downloadBtn = document.getElementById("downloadBtn");
     const copyBtn = document.getElementById("copyBtn");
     const copyLinkBtn = document.getElementById("copyLinkBtn");
     const clearAllBtn = document.getElementById("clearAllBtn");
 
-    // Fixed output size (per your requirement)
+    // Fixed output size
     const FIXED_W = 1800;
     const FIXED_H = 360;
 
@@ -95,21 +180,17 @@
     };
 
     const PRESETS = {
-      diamond: {
-        yes: "Peer review for diamond open access",
-        no: "Peer review for paywalls and APCs"
+      forprofit: {
+        no: "Peer review for paywalls and APCs",
+        yes: "Peer review for diamond open access"
       },
-      nonprofit: {
-        yes: "Peer review for non-profit publishing",
-        no: "Peer review for publisher profit"
+      predatory: {
+        no: "Predatory publishing practices",
+        yes: "Legitimate academic journals"
       },
-      paywalls: {
-        yes: "Peer review for open access science",
-        no: "Peer review for paywalls after free work"
-      },
-      spam: {
-        yes: "Constructive peer review",
-        no: "Automated reviewer invitations"
+      automated: {
+        no: "Automated review invitations",
+        yes: "Legitimate editorial requests"
       }
     };
 
@@ -174,18 +255,16 @@
 
     // Fit a single shared font size for both "YES" and "NO" within the label blocks
     function fitLabelFontSize(targetCtx, labelBlockW, innerH) {
-      const maxW = labelBlockW * 0.86; // leave comfortable side padding
-      const maxH = innerH * 0.80;      // leave top/bottom padding
-      let size = Math.floor(innerH * 0.62); // starting point
+      const maxW = labelBlockW * 0.86;
+      const maxH = innerH * 0.80;
+      let size = Math.floor(innerH * 0.62);
 
       while (size > 20) {
         targetCtx.font = `bold ${size}px Arial`;
         const yesW = targetCtx.measureText("YES").width;
         const noW  = targetCtx.measureText("NO").width;
 
-        if (yesW <= maxW && noW <= maxW && size <= maxH) {
-          return size;
-        }
+        if (yesW <= maxW && noW <= maxW && size <= maxH) return size;
         size -= 2;
       }
       return 20;
@@ -193,13 +272,12 @@
 
     // ---------- Drawing ----------
     function drawSticker(targetCtx, W, H) {
-      // Proportions tuned to match your reference and ensure YES fits
       const border = Math.max(10, Math.round(W * 0.006));
       const pad = Math.round(W * 0.015);
       const sepW = Math.max(10, Math.round(W * 0.006));
 
-      // Equal-sized red/green blocks (requirement)
-      const labelBlockW = Math.round(W * 0.16); // slightly wider so YES always fits
+      // Equal-sized red/green blocks
+      const labelBlockW = Math.round(W * 0.16);
       const innerH = H - 2 * border;
 
       const totalInnerW = W - 2 * border;
@@ -232,7 +310,7 @@
       targetCtx.fillStyle = COLORS.yes;
       targetCtx.fillRect(xYesBlock, border, labelBlockW, innerH);
 
-      // Big fixed labels (YES/NO must match font size)
+      // Big fixed labels
       targetCtx.fillStyle = COLORS.text;
       targetCtx.textAlign = "center";
       targetCtx.textBaseline = "middle";
@@ -258,7 +336,6 @@
           targetCtx.font = `bold ${size}px Arial`;
           const lines = wrapText(targetCtx, text, maxW, size, maxLines);
 
-          // Verify each line fits
           let ok = true;
           for (const ln of lines) {
             if (targetCtx.measureText(ln).width > maxW) { ok = false; break; }
@@ -287,7 +364,6 @@
     }
 
     function renderPreview() {
-      // Ensure fixed size (preview + export match exactly)
       canvas.width = FIXED_W;
       canvas.height = FIXED_H;
       drawSticker(ctx, canvas.width, canvas.height);
@@ -320,16 +396,20 @@
       }
     }
 
-    // ---------- Presets ----------
-    function applyPreset(key) {
+    // ---------- Preset selection ----------
+    function clearPresetSelection() {
+      presetRadios.forEach(r => r.checked = false);
+    }
+
+    function applyPresetKey(key) {
       if (!key || !PRESETS[key]) return;
-      yesInput.value = PRESETS[key].yes;
       noInput.value = PRESETS[key].no;
+      yesInput.value = PRESETS[key].yes;
     }
 
     // ---------- Clear all ----------
     function clearAll() {
-      presetSelect.value = "";
+      clearPresetSelection();
       yesInput.value = DEFAULTS.yes;
       noInput.value = DEFAULTS.no;
       updateURL();
@@ -348,12 +428,19 @@
     renderPreview();
 
     // ---------- Events ----------
-    yesInput.addEventListener("input", onAnyChange);
-    noInput.addEventListener("input", onAnyChange);
-
-    presetSelect.addEventListener("change", () => {
-      applyPreset(presetSelect.value);
+    yesInput.addEventListener("input", () => {
+      // if user types, treat as personal message; do not force-clear preset selection
       onAnyChange();
+    });
+    noInput.addEventListener("input", () => {
+      onAnyChange();
+    });
+
+    presetRadios.forEach(radio => {
+      radio.addEventListener("change", () => {
+        applyPresetKey(radio.value);
+        onAnyChange();
+      });
     });
 
     downloadBtn.addEventListener("click", downloadPNG);
