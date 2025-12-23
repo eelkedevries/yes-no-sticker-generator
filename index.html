@@ -52,6 +52,11 @@
     textarea { resize: vertical; min-height: 90px; }
 
     .radio-group { display: grid; gap: 8px; margin-top: 8px; }
+    /* If there is enough space, show 2x2 grid */
+    @media (min-width: 900px) {
+      .radio-group { grid-template-columns: 1fr 1fr; }
+    }
+
     .radio-item {
       display: flex; gap: 10px; align-items: flex-start;
       padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: #fff;
@@ -135,12 +140,13 @@
 
     canvas { width: 100%; border: 1px solid #ddd; border-radius: 12px; display: block; background: #fff; }
     .muted { font-size: 13px; color: #444; margin-top: 6px; }
+
+    .inline-grow { flex: 1 1 520px; min-width: 260px; }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <!-- 1) Title + intro -->
     <h1>My review policy</h1>
 
     <p class="subtext">
@@ -161,7 +167,6 @@
       </span>
     </p>
 
-    <!-- 2) Review policy section -->
     <h2>What is your personal review policy</h2>
 
     <div class="panel">
@@ -230,12 +235,11 @@
 
       <div class="divider"></div>
 
-      <!-- moved here per requirement -->
       <div class="panel-title">Text size</div>
       <div class="option-row">
         <div class="font-control" aria-label="Font size control">
-          <div class="label">Base text size</div>
-          <input id="baseFontSize" class="font-size-box" type="text" inputmode="numeric" value="64" aria-label="Base font size" />
+          <div class="label">Text size</div>
+          <input id="baseFontSize" class="font-size-box" type="text" inputmode="numeric" value="64" aria-label="Text size" />
           <div class="stepper" aria-label="Increase or decrease font size">
             <button id="fontPlus" type="button" aria-label="Increase font size">+</button>
             <button id="fontMinus" type="button" aria-label="Decrease font size">−</button>
@@ -244,7 +248,6 @@
       </div>
     </div>
 
-    <!-- 3) Header and footer -->
     <h2>Header and footer (optional)</h2>
 
     <div class="panel">
@@ -252,8 +255,18 @@
       <div class="option-row">
         <input id="showHeader" type="checkbox" checked />
         <label for="showHeader" style="margin:0; font-weight:700;">Add heading text above image</label>
-        <div style="flex: 1 1 520px; min-width: 260px;">
+
+        <div class="inline-grow">
           <input id="headerText" type="text" value="MY REVIEW POLICY" />
+        </div>
+
+        <div class="font-control" aria-label="Header font size control">
+          <div class="label">Size</div>
+          <input id="headerFontSize" class="font-size-box" type="text" inputmode="numeric" value="45" aria-label="Header text size" />
+          <div class="stepper" aria-label="Increase or decrease header font size">
+            <button id="headerPlus" type="button" aria-label="Increase header font size">+</button>
+            <button id="headerMinus" type="button" aria-label="Decrease header font size">−</button>
+          </div>
         </div>
       </div>
 
@@ -261,20 +274,29 @@
       <div class="option-row">
         <input id="showFooter" type="checkbox" />
         <label for="showFooter" style="margin:0; font-weight:700;">Add footer text below image</label>
-        <div style="flex: 1 1 520px; min-width: 260px;">
+
+        <div class="inline-grow">
           <input id="footerText" type="text" value="" placeholder="(optional)" />
+        </div>
+
+        <div class="font-control" aria-label="Footer font size control">
+          <div class="label">Size</div>
+          <input id="footerFontSize" class="font-size-box" type="text" inputmode="numeric" value="40" aria-label="Footer text size" />
+          <div class="stepper" aria-label="Increase or decrease footer font size">
+            <button id="footerPlus" type="button" aria-label="Increase footer font size">+</button>
+            <button id="footerMinus" type="button" aria-label="Decrease footer font size">−</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 4) Output -->
     <h2>Output</h2>
 
     <div class="panel">
       <div class="panel-title">Your image</div>
 
       <div id="overflowWarning" class="warning" role="status" aria-live="polite">
-        Some text does not fit in the image at the current font size. Reduce the font size, shorten the text, or disable header/footer.
+        Some text does not fit in the image at the current font sizes. Reduce the relevant font size, shorten the text, or disable header/footer.
       </div>
 
       <div class="actions">
@@ -287,7 +309,7 @@
       </div>
 
       <div class="muted">
-        “Share webpage” uses your device share menu when available. “Share image” uses the share menu if your browser supports sharing files.
+        If “Share image” is not supported by your browser, use Download PNG or Copy image.
       </div>
 
       <div style="margin-top:12px;">
@@ -325,16 +347,19 @@
       p4: { no: "Automated review invitations", yes: "Legitimate editorial requests" }
     };
 
-    // Hard defaults (page reload must reset to these)
+    // Defaults:
+    // - header font should be 30% smaller than YES/NO default (64 -> 45)
     const DEFAULT_STATE = {
-      preset: "", // none selected
+      preset: "",
       noText: PRESETS.p1.no,
       yesText: PRESETS.p1.yes,
       baseFontSize: 64,
       showHeader: true,
       headerText: "MY REVIEW POLICY",
+      headerFontSize: 45, // 64 * 0.7 ≈ 44.8
       showFooter: false,
-      footerText: ""
+      footerText: "",
+      footerFontSize: 40
     };
 
     // -----------------------
@@ -347,15 +372,21 @@
     const yesInput = document.getElementById("yesText");
     const presetRadios = Array.from(document.querySelectorAll('input[name="preset"]'));
 
-    const showHeader = document.getElementById("showHeader");
-    const headerTextInput = document.getElementById("headerText");
-
-    const showFooter = document.getElementById("showFooter");
-    const footerTextInput = document.getElementById("footerText");
-
     const baseFontSizeInput = document.getElementById("baseFontSize");
     const fontPlusBtn = document.getElementById("fontPlus");
     const fontMinusBtn = document.getElementById("fontMinus");
+
+    const showHeader = document.getElementById("showHeader");
+    const headerTextInput = document.getElementById("headerText");
+    const headerFontSizeInput = document.getElementById("headerFontSize");
+    const headerPlusBtn = document.getElementById("headerPlus");
+    const headerMinusBtn = document.getElementById("headerMinus");
+
+    const showFooter = document.getElementById("showFooter");
+    const footerTextInput = document.getElementById("footerText");
+    const footerFontSizeInput = document.getElementById("footerFontSize");
+    const footerPlusBtn = document.getElementById("footerPlus");
+    const footerMinusBtn = document.getElementById("footerMinus");
 
     const overflowWarning = document.getElementById("overflowWarning");
 
@@ -367,126 +398,41 @@
     const clearBtn = document.getElementById("clearBtn");
 
     // -----------------------
-    // Clipboard: robust copy link (Android Firefox fallback)
-    // -----------------------
-    async function copyLinkRobust() {
-      const url = window.location.origin + window.location.pathname; // no state in URL
-
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(url);
-          alert("Link copied to clipboard.");
-          return;
-        }
-      } catch (e) {}
-
-      try {
-        const tmp = document.createElement("textarea");
-        tmp.value = url;
-        tmp.setAttribute("readonly", "");
-        tmp.style.position = "fixed";
-        tmp.style.left = "-9999px";
-        tmp.style.top = "0";
-        document.body.appendChild(tmp);
-        tmp.select();
-        tmp.setSelectionRange(0, tmp.value.length);
-        const ok = document.execCommand("copy");
-        document.body.removeChild(tmp);
-        if (ok) alert("Link copied to clipboard.");
-        else alert("Copy failed. Please copy from the address bar.");
-      } catch (e) {
-        alert("Copy failed. Please copy from the address bar.");
-      }
-    }
-
-    // -----------------------
-    // Share buttons
-    // -----------------------
-    async function shareWebpage() {
-      const url = window.location.origin + window.location.pathname;
-      const data = { title: document.title, text: "My review policy (#MyReviewPolicy)", url };
-
-      if (!navigator.share) {
-        await copyLinkRobust();
-        return;
-      }
-
-      try { await navigator.share(data); } catch (e) {}
-    }
-
-    function canvasToBlob(canvasEl) {
-      return new Promise((resolve) => canvasEl.toBlob(resolve, "image/png"));
-    }
-
-    async function shareImage() {
-      if (!navigator.share || !navigator.canShare) {
-        alert("Sharing an image is not supported in this browser. You can still Download PNG or Copy image.");
-        return;
-      }
-
-      try {
-        const blob = await canvasToBlob(canvas);
-        if (!blob) { alert("Could not create image."); return; }
-
-        const file = new File([blob], "my-review-policy.png", { type: "image/png" });
-        const data = { files: [file], title: "My review policy", text: "#MyReviewPolicy" };
-
-        if (!navigator.canShare(data)) {
-          alert("Sharing an image is not supported in this browser. You can still Download PNG or Copy image.");
-          return;
-        }
-
-        await navigator.share(data);
-      } catch (e) {}
-    }
-
-    // -----------------------
-    // Font size control
+    // Helpers
     // -----------------------
     function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 
-    function getBaseFontSize() {
-      const n = parseInt(baseFontSizeInput.value, 10);
-      if (!Number.isFinite(n)) return DEFAULT_STATE.baseFontSize;
-      return clamp(n, 10, 140);
+    function parseIntOr(fallback, v) {
+      const n = parseInt(v, 10);
+      return Number.isFinite(n) ? n : fallback;
     }
 
-    function setBaseFontSize(n) {
-      baseFontSizeInput.value = clamp(n, 10, 140);
-    }
+    function getBaseFontSize() { return clamp(parseIntOr(DEFAULT_STATE.baseFontSize, baseFontSizeInput.value), 10, 140); }
+    function setBaseFontSize(n) { baseFontSizeInput.value = clamp(n, 10, 140); }
 
-    function bumpFont(delta) {
-      setBaseFontSize(getBaseFontSize() + delta);
-      renderAll();
-    }
+    function getHeaderFontSize() { return clamp(parseIntOr(DEFAULT_STATE.headerFontSize, headerFontSizeInput.value), 10, 140); }
+    function setHeaderFontSize(n) { headerFontSizeInput.value = clamp(n, 10, 140); }
+
+    function getFooterFontSize() { return clamp(parseIntOr(DEFAULT_STATE.footerFontSize, footerFontSizeInput.value), 10, 140); }
+    function setFooterFontSize(n) { footerFontSizeInput.value = clamp(n, 10, 140); }
+
+    function bumpFont(delta) { setBaseFontSize(getBaseFontSize() + delta); renderAll(); }
+    function bumpHeaderFont(delta) { setHeaderFontSize(getHeaderFontSize() + delta); renderAll(); }
+    function bumpFooterFont(delta) { setFooterFontSize(getFooterFontSize() + delta); renderAll(); }
 
     // -----------------------
-    // Wrapping with:
-    // - preserves spaces and newlines
-    // - breaks very long words to prevent bleed into other box
-    // - no max line limit in wrapping; we detect vertical overflow separately
+    // Wrapping preserving spaces/newlines + breaking long words
     // -----------------------
-    function splitPreserveNewlines(text) {
-      return (text || "").split(/\r?\n/);
-    }
-
-    function tokenizePreserveSpaces(s) {
-      return (s || "").match(/(\s+|\S+)/g) || [];
-    }
+    function splitPreserveNewlines(text) { return (text || "").split(/\r?\n/); }
+    function tokenizePreserveSpaces(s) { return (s || "").match(/(\s+|\S+)/g) || []; }
 
     function breakTokenToFit(ctx, token, maxWidth) {
-      // Break a single non-whitespace token into pieces that fit maxWidth.
-      // Uses simple greedy character splitting.
       const parts = [];
       let cur = "";
       for (const ch of token) {
         const test = cur + ch;
-        if (ctx.measureText(test).width <= maxWidth || cur.length === 0) {
-          cur = test;
-        } else {
-          parts.push(cur);
-          cur = ch;
-        }
+        if (ctx.measureText(test).width <= maxWidth || cur.length === 0) cur = test;
+        else { parts.push(cur); cur = ch; }
       }
       if (cur) parts.push(cur);
       return parts;
@@ -494,7 +440,6 @@
 
     function wrapTextNoLimit(ctx, text, maxWidth, fontSize) {
       ctx.font = `bold ${fontSize}px Arial`;
-
       const paragraphs = splitPreserveNewlines(text);
       const lines = [];
 
@@ -502,67 +447,39 @@
         const para = paragraphs[pi];
         const tokens = tokenizePreserveSpaces(para);
 
-        // Empty paragraph -> blank line
-        if (tokens.length === 0 && para.length === 0) {
-          lines.push("");
-          continue;
-        }
+        if (tokens.length === 0 && para.length === 0) { lines.push(""); continue; }
 
         let line = "";
 
         for (const tok of tokens) {
           const isSpace = /^\s+$/.test(tok);
-
-          // Avoid leading whitespace on a new line
           if (line.length === 0 && isSpace) continue;
 
-          if (!isSpace) {
-            // If the token alone is wider than maxWidth, break it
-            if (ctx.measureText(tok).width > maxWidth) {
-              const pieces = breakTokenToFit(ctx, tok, maxWidth);
-
-              for (const piece of pieces) {
-                const test = line ? (line + piece) : piece;
-                if (ctx.measureText(test).width <= maxWidth || line.length === 0) {
-                  line = test;
-                } else {
-                  lines.push(line);
-                  line = piece;
-                }
-              }
-              continue;
+          if (!isSpace && ctx.measureText(tok).width > maxWidth) {
+            const pieces = breakTokenToFit(ctx, tok, maxWidth);
+            for (const piece of pieces) {
+              const test = line ? (line + piece) : piece;
+              if (ctx.measureText(test).width <= maxWidth || line.length === 0) line = test;
+              else { lines.push(line); line = piece; }
             }
+            continue;
           }
 
           const test = line + tok;
-
-          if (ctx.measureText(test).width <= maxWidth || line.length === 0) {
-            line = test;
-          } else {
-            lines.push(line);
-            line = isSpace ? "" : tok; // start next line; drop leading spaces
-          }
+          if (ctx.measureText(test).width <= maxWidth || line.length === 0) line = test;
+          else { lines.push(line); line = isSpace ? "" : tok; }
         }
 
         if (line !== "") lines.push(line);
-
-        // Force newline between paragraphs (except last)
         if (pi < paragraphs.length - 1) lines.push("");
       }
 
       return lines;
     }
 
-    // -----------------------
-    // Fit checks and clipping
-    // - No font shrinking; instead we compute overflow flags and clip drawing to each box
-    // -----------------------
+    // Draw clipped text block; returns overflow flag (vertical or unexpected horizontal)
     function drawTextBlockClipped(opts) {
-      const {
-        ctx, text, x, y, w, h,
-        fontSize, lineGap,
-        align // "left" or "right" or "center"
-      } = opts;
+      const { ctx, text, x, y, w, h, fontSize, lineGap, align, fillStyle } = opts;
 
       ctx.save();
       ctx.beginPath();
@@ -570,37 +487,30 @@
       ctx.clip();
 
       ctx.font = `bold ${fontSize}px Arial`;
-      ctx.fillStyle = COLORS.text;
+      ctx.fillStyle = fillStyle;
       ctx.textBaseline = "top";
       ctx.textAlign = align;
 
-      const padX = 0;
       const maxWidth = w;
-
       const lines = wrapTextNoLimit(ctx, text, maxWidth, fontSize);
 
-      let cy = y;
       const lh = fontSize + lineGap;
-
-      // draw as many as fit
-      const maxLinesThatFit = Math.floor((h) / lh);
+      const maxLinesThatFit = Math.max(0, Math.floor(h / lh));
       const willOverflowVert = lines.length > maxLinesThatFit;
 
+      let cy = y;
       for (let i = 0; i < Math.min(lines.length, maxLinesThatFit); i++) {
         const line = lines[i];
-
-        let tx = x + padX;
-        if (align === "right") tx = x + w - padX;
+        let tx = x;
+        if (align === "right") tx = x + w;
         if (align === "center") tx = x + w / 2;
-
         ctx.fillText(line, tx, cy);
         cy += lh;
       }
 
       ctx.restore();
 
-      // Horizontal overflow should be impossible because we wrap/break long words,
-      // but keep a safety check on the final lines:
+      // Safety check for horizontal overflow (should not happen due to wrapping + breaking)
       ctx.font = `bold ${fontSize}px Arial`;
       let willOverflowHoriz = false;
       for (const ln of lines) {
@@ -625,11 +535,14 @@
       return 20;
     }
 
+    // -----------------------
+    // Drawing
+    // -----------------------
     function drawHeaderBand(ctx, W, headerH, text, fontSizeFixed) {
       ctx.fillStyle = COLORS.headerBg;
       ctx.fillRect(0, 0, W, headerH);
 
-      // fixed size; clip + overflow if too wide
+      // clip + overflow check
       ctx.save();
       ctx.beginPath();
       ctx.rect(0, 0, W, headerH);
@@ -713,12 +626,11 @@
       ctx.fillText("NO", xNoBlock + labelBlockW / 2, H / 2);
       ctx.fillText("YES", xYesBlock + labelBlockW / 2, H / 2);
 
-      // Text areas (no auto-shrink)
+      // Text areas (no auto-shrink; clipped)
       const startY = border + Math.round(H * 0.16);
-      const boxH = innerH - Math.round(H * 0.16) - Math.round(H * 0.10); // leave some bottom breathing room
+      const boxH = innerH - Math.round(H * 0.16) - Math.round(H * 0.10);
       const lineGap = Math.round(baseFontSize * 0.18);
 
-      // Clip rectangles prevent any bleed across NO/YES areas (fixes long words)
       const noOverflow = drawTextBlockClipped({
         ctx,
         text: noInput.value,
@@ -728,7 +640,8 @@
         h: boxH,
         fontSize: baseFontSize,
         lineGap,
-        align: "left"
+        align: "left",
+        fillStyle: COLORS.text
       }).overflow;
 
       const yesOverflow = drawTextBlockClipped({
@@ -740,7 +653,8 @@
         h: boxH,
         fontSize: baseFontSize,
         lineGap,
-        align: "right"
+        align: "right",
+        fillStyle: COLORS.text
       }).overflow;
 
       return { overflow: (noOverflow || yesOverflow) };
@@ -759,14 +673,12 @@
       let overflow = false;
       let y = 0;
 
-      // Header (fixed font size: baseFontSize)
       if (hasHeader) {
-        const headerOverflow = drawHeaderBand(ctx, STICKER_W, HEADER_H, headerTextInput.value, getBaseFontSize());
+        const headerOverflow = drawHeaderBand(ctx, STICKER_W, HEADER_H, headerTextInput.value, getHeaderFontSize());
         overflow = overflow || headerOverflow.overflow;
         y += HEADER_H;
       }
 
-      // Sticker
       ctx.save();
       ctx.translate(0, y);
       const stickerOverflow = drawSticker(ctx, STICKER_W, STICKER_H, getBaseFontSize());
@@ -775,10 +687,8 @@
 
       y += STICKER_H;
 
-      // Footer (fixed font size: baseFontSize * 0.7 for aesthetics, still fixed/no shrink)
       if (hasFooter) {
-        const footerFont = Math.max(14, Math.round(getBaseFontSize() * 0.70));
-        const footerOverflow = drawFooterBand(ctx, STICKER_W, FOOTER_H, y, footerTextInput.value, footerFont);
+        const footerOverflow = drawFooterBand(ctx, STICKER_W, FOOTER_H, y, footerTextInput.value, getFooterFontSize());
         overflow = overflow || footerOverflow.overflow;
       }
 
@@ -786,11 +696,9 @@
     }
 
     // -----------------------
-    // Presets / state
+    // State / defaults
     // -----------------------
-    function clearPresetSelection() {
-      presetRadios.forEach(r => r.checked = false);
-    }
+    function clearPresetSelection() { presetRadios.forEach(r => r.checked = false); }
 
     function applyPresetKey(key) {
       const p = PRESETS[key];
@@ -808,20 +716,19 @@
 
       showHeader.checked = DEFAULT_STATE.showHeader;
       headerTextInput.value = DEFAULT_STATE.headerText;
+      setHeaderFontSize(DEFAULT_STATE.headerFontSize);
 
       showFooter.checked = DEFAULT_STATE.showFooter;
       footerTextInput.value = DEFAULT_STATE.footerText;
+      setFooterFontSize(DEFAULT_STATE.footerFontSize);
 
       setCanvasSizeAndRender();
     }
 
-    function renderAll() {
-      // No URL state persistence: reloading resets to defaults by design.
-      setCanvasSizeAndRender();
-    }
+    function renderAll() { setCanvasSizeAndRender(); }
 
     // -----------------------
-    // Export / clipboard image
+    // Export / clipboard
     // -----------------------
     function downloadPNG() {
       const a = document.createElement("a");
@@ -846,36 +753,116 @@
       }
     }
 
+    async function copyLinkRobust() {
+      const url = window.location.origin + window.location.pathname;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(url);
+          alert("Link copied to clipboard.");
+          return;
+        }
+      } catch (e) {}
+
+      try {
+        const tmp = document.createElement("textarea");
+        tmp.value = url;
+        tmp.setAttribute("readonly", "");
+        tmp.style.position = "fixed";
+        tmp.style.left = "-9999px";
+        tmp.style.top = "0";
+        document.body.appendChild(tmp);
+        tmp.select();
+        tmp.setSelectionRange(0, tmp.value.length);
+        const ok = document.execCommand("copy");
+        document.body.removeChild(tmp);
+        if (ok) alert("Link copied to clipboard.");
+        else alert("Copy failed. Please copy from the address bar.");
+      } catch (e) {
+        alert("Copy failed. Please copy from the address bar.");
+      }
+    }
+
+    // -----------------------
+    // Share buttons
+    // -----------------------
+    async function shareWebpage() {
+      const url = window.location.origin + window.location.pathname;
+      const data = { title: document.title, text: "My review policy (#MyReviewPolicy)", url };
+
+      if (!navigator.share) {
+        await copyLinkRobust();
+        return;
+      }
+      try { await navigator.share(data); } catch (e) {}
+    }
+
+    function canvasToBlob(canvasEl) {
+      return new Promise((resolve) => canvasEl.toBlob(resolve, "image/png"));
+    }
+
+    async function shareImage() {
+      // Strategy:
+      // 1) If file sharing is supported -> share File (best)
+      // 2) Else, try sharing an object URL as a regular URL (works in some browsers)
+      // 3) Else, fall back to Download PNG
+      if (!navigator.share) {
+        downloadPNG();
+        return;
+      }
+
+      try {
+        const blob = await canvasToBlob(canvas);
+        if (!blob) { downloadPNG(); return; }
+
+        const file = new File([blob], "my-review-policy.png", { type: "image/png" });
+
+        // Prefer Web Share Level 2 (files)
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: "My review policy", text: "#MyReviewPolicy" });
+          return;
+        }
+
+        // Fallback: share a temporary object URL
+        const objUrl = URL.createObjectURL(blob);
+        try {
+          await navigator.share({ title: "My review policy", text: "#MyReviewPolicy", url: objUrl });
+        } finally {
+          // Revoke after a short delay (some share UIs read the URL asynchronously)
+          setTimeout(() => URL.revokeObjectURL(objUrl), 5000);
+        }
+      } catch (e) {
+        // Last resort: download
+        downloadPNG();
+      }
+    }
+
     // -----------------------
     // Events
     // -----------------------
     function onAnyChange() { renderAll(); }
 
     presetRadios.forEach(radio => {
-      radio.addEventListener("change", () => {
-        applyPresetKey(radio.value);
-        onAnyChange();
-      });
+      radio.addEventListener("change", () => { applyPresetKey(radio.value); onAnyChange(); });
     });
 
     noInput.addEventListener("input", onAnyChange);
     yesInput.addEventListener("input", onAnyChange);
 
+    baseFontSizeInput.addEventListener("input", () => { setBaseFontSize(getBaseFontSize()); onAnyChange(); });
+    fontPlusBtn.addEventListener("click", () => bumpFont(+2));
+    fontMinusBtn.addEventListener("click", () => bumpFont(-2));
+
     showHeader.addEventListener("change", onAnyChange);
     headerTextInput.addEventListener("input", onAnyChange);
+    headerFontSizeInput.addEventListener("input", () => { setHeaderFontSize(getHeaderFontSize()); onAnyChange(); });
+    headerPlusBtn.addEventListener("click", () => bumpHeaderFont(+2));
+    headerMinusBtn.addEventListener("click", () => bumpHeaderFont(-2));
 
     showFooter.addEventListener("change", onAnyChange);
     footerTextInput.addEventListener("input", onAnyChange);
-
-    baseFontSizeInput.addEventListener("input", () => {
-      const n = parseInt(baseFontSizeInput.value, 10);
-      if (!Number.isFinite(n)) return;
-      setBaseFontSize(n);
-      onAnyChange();
-    });
-
-    fontPlusBtn.addEventListener("click", () => bumpFont(+2));
-    fontMinusBtn.addEventListener("click", () => bumpFont(-2));
+    footerFontSizeInput.addEventListener("input", () => { setFooterFontSize(getFooterFontSize()); onAnyChange(); });
+    footerPlusBtn.addEventListener("click", () => bumpFooterFont(+2));
+    footerMinusBtn.addEventListener("click", () => bumpFooterFont(-2));
 
     downloadBtn.addEventListener("click", downloadPNG);
     copyBtn.addEventListener("click", copyImage);
@@ -884,12 +871,9 @@
     shareImageBtn.addEventListener("click", shareImage);
 
     clearBtn.addEventListener("click", setDefaults);
+    window.addEventListener("resize", setCanvasSizeAndRender);
 
-    window.addEventListener("resize", () => setCanvasSizeAndRender());
-
-    // -----------------------
     // Init: always reset to defaults on reload
-    // -----------------------
     setDefaults();
   </script>
 </body>
