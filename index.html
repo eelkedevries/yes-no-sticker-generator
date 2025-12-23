@@ -6,33 +6,58 @@
   <title>My review policy</title>
   <style>
     body { font-family: Arial, Helvetica, sans-serif; margin: 24px; color: #111; }
-    .wrap { max-width: 1040px; }
+    .wrap { max-width: 1080px; }
 
     h1 { font-size: 28px; margin: 0 0 10px 0; }
+    h2 { font-size: 20px; margin: 20px 0 10px 0; }
     .subtext {
       margin: 0 0 14px 0;
       line-height: 1.45;
       font-size: 14px;
       color: #222;
-      max-width: 980px;
+      max-width: 1000px;
     }
 
     .iconbar { display: inline-flex; gap: 10px; vertical-align: middle; margin-left: 6px; }
     .iconlink { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; }
     .iconlink svg { width: 20px; height: 20px; display: block; }
 
-    .row { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; align-items: end; }
-    .col { flex: 1 1 420px; }
-
-    .section-title { margin-top: 14px; font-size: 15px; font-weight: 700; color: #111; }
-    label { display: block; font-size: 14px; margin-bottom: 6px; }
-
-    input[type="text"]{
-      width: 100%; padding: 10px 12px; font-size: 16px;
-      border: 1px solid #ccc; border-radius: 8px; background: #fff;
+    .panel {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 14px 14px 6px 14px;
+      background: #fff;
+      margin: 10px 0 16px 0;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      color: #111;
+    }
+    .panel-subtitle {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 8px 0 10px 0;
+      color: #111;
     }
 
-    .radio-group { margin-top: 8px; display: grid; gap: 8px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; align-items: flex-start; }
+    .col { flex: 1 1 420px; }
+
+    label { display: block; font-size: 14px; margin-bottom: 6px; }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+
+    .radio-group { display: grid; gap: 8px; margin-top: 8px; }
     .radio-item {
       display: flex; gap: 10px; align-items: flex-start;
       padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: #fff;
@@ -42,28 +67,74 @@
     .radio-name { font-weight: 700; font-size: 14px; color: #111; }
     .radio-pair { font-size: 13px; color: #333; line-height: 1.35; }
 
-    .tiny { font-size: 13px; color: #333; }
-
-    .controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
-    button {
-      padding: 10px 14px; font-size: 16px; cursor: pointer;
-      border: 1px solid #ccc; border-radius: 8px; background: #fff;
+    .option-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 8px 0;
     }
-    button:active { transform: translateY(1px); }
+    .option-row input[type="checkbox"] { transform: translateY(1px); }
 
-    .headeropts {
-      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-      margin: 10px 0 6px 0;
+    .font-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: #fafafa;
     }
-    .headeropts label { margin: 0; font-size: 14px; }
-    .headeropts input[type="checkbox"] { margin-right: 8px; transform: translateY(1px); }
+    .font-control .label { font-size: 14px; font-weight: 700; color: #111; }
+    .font-size-box {
+      width: 70px;
+      text-align: center;
+      font-size: 16px;
+    }
+    .stepper {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .stepper button {
+      width: 36px;
+      height: 32px;
+      padding: 0;
+      font-size: 18px;
+      line-height: 1;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .stepper button:active { transform: translateY(1px); }
 
-    canvas { width: 100%; border: 1px solid #ddd; border-radius: 12px; display: block; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 10px 0 0 0;
+    }
+    button.action {
+      padding: 10px 14px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+    }
+    button.action:active { transform: translateY(1px); }
+
+    canvas { width: 100%; border: 1px solid #ddd; border-radius: 12px; display: block; background: #fff; }
+
+    .muted { font-size: 13px; color: #444; margin-top: 6px; }
+    .divider { height: 1px; background: #eee; margin: 14px 0; }
   </style>
 </head>
 
 <body>
   <div class="wrap">
+    <!-- 1) Title + intro -->
     <h1>My review policy</h1>
 
     <p class="subtext">
@@ -72,13 +143,11 @@
       &nbsp;Read more here: <a href="#" id="readMoreLink">[link coming soon]</a>
       <span class="iconbar" aria-label="Links">
         <a class="iconlink" href="https://www.linkedin.com/in/eelkedevries" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-          <!-- LinkedIn icon -->
           <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
             <path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.036-1.852-3.036-1.853 0-2.136 1.445-2.136 2.939v5.666H9.35V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.368-1.85 3.6 0 4.269 2.368 4.269 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.815 20.452H3.858V9h2.957v11.452z"/>
           </svg>
         </a>
         <a class="iconlink" href="https://github.com/eelkedevries/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <!-- GitHub icon -->
           <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
             <path fill="#111" d="M12 .5C5.73.5.75 5.62.75 12.05c0 5.14 3.19 9.5 7.62 11.04.56.11.77-.25.77-.56 0-.27-.01-1.17-.02-2.12-3.1.69-3.75-1.25-3.75-1.25-.5-1.33-1.23-1.68-1.23-1.68-1-.71.08-.7.08-.7 1.11.08 1.7 1.18 1.7 1.18.98 1.74 2.57 1.24 3.2.95.1-.73.38-1.24.69-1.52-2.48-.29-5.08-1.28-5.08-5.69 0-1.26.44-2.29 1.17-3.1-.12-.3-.51-1.52.11-3.16 0 0 .95-.31 3.12 1.18a10.7 10.7 0 0 1 2.84-.39c.96 0 1.93.13 2.84.39 2.17-1.49 3.12-1.18 3.12-1.18.62 1.64.23 2.86.11 3.16.73.81 1.17 1.84 1.17 3.1 0 4.42-2.61 5.39-5.1 5.68.39.35.74 1.04.74 2.11 0 1.52-.02 2.74-.02 3.11 0 .31.2.68.78.56 4.42-1.54 7.61-5.9 7.61-11.04C23.25 5.62 18.27.5 12 .5z"/>
           </svg>
@@ -86,82 +155,135 @@
       </span>
     </p>
 
-    <div class="section-title">Select the kind of review invitation you received.</div>
+    <!-- 2) Personal review policy section -->
+    <h2>What is your personal review policy</h2>
 
-    <div class="radio-group" role="radiogroup" aria-label="Select the kind of review invitation you received">
-      <div class="radio-item">
-        <input type="radio" id="preset1" name="preset" value="p1" />
-        <div class="radio-label">
-          <div class="radio-name">For-profit publishers</div>
-          <div class="radio-pair">
-            <strong>NO:</strong> Peer review for paywalls and APCs<br>
-            <strong>YES:</strong> Peer review for diamond open access
+    <div class="panel">
+      <div class="panel-title">Select default review policy</div>
+
+      <div class="radio-group" role="radiogroup" aria-label="Select default review policy">
+        <div class="radio-item">
+          <input type="radio" id="preset1" name="preset" value="p1" />
+          <div class="radio-label">
+            <div class="radio-name">For-profit publishers</div>
+            <div class="radio-pair">
+              <strong>NO:</strong> Peer review for paywalls and APCs<br>
+              <strong>YES:</strong> Peer review for diamond open access
+            </div>
+          </div>
+        </div>
+
+        <div class="radio-item">
+          <input type="radio" id="preset2" name="preset" value="p2" />
+          <div class="radio-label">
+            <div class="radio-name">For-profit publishers</div>
+            <div class="radio-pair">
+              <strong>NO:</strong> Peer review for publisher profit<br>
+              <strong>YES:</strong> Peer review for non-profit publishing
+            </div>
+          </div>
+        </div>
+
+        <div class="radio-item">
+          <input type="radio" id="preset3" name="preset" value="p3" />
+          <div class="radio-label">
+            <div class="radio-name">Predatory publishers</div>
+            <div class="radio-pair">
+              <strong>NO:</strong> Peer review for predatory publishers<br>
+              <strong>YES:</strong> Peer review for legitimate journals
+            </div>
+          </div>
+        </div>
+
+        <div class="radio-item">
+          <input type="radio" id="preset4" name="preset" value="p4" />
+          <div class="radio-label">
+            <div class="radio-name">Automated review invitations</div>
+            <div class="radio-pair">
+              <strong>NO:</strong> Automated review invitations<br>
+              <strong>YES:</strong> Legitimate editorial requests
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="radio-item">
-        <input type="radio" id="preset2" name="preset" value="p2" />
-        <div class="radio-label">
-          <div class="radio-name">For-profit publishers</div>
-          <div class="radio-pair">
-            <strong>NO:</strong> Peer review for publisher profit<br>
-            <strong>YES:</strong> Peer review for non-profit publishing
-          </div>
-        </div>
-      </div>
+      <div class="divider"></div>
 
-      <div class="radio-item">
-        <input type="radio" id="preset3" name="preset" value="p3" />
-        <div class="radio-label">
-          <div class="radio-name">Predatory publishers</div>
-          <div class="radio-pair">
-            <strong>NO:</strong> Peer review for predatory publishers<br>
-            <strong>YES:</strong> Peer review for legitimate journals
-          </div>
-        </div>
-      </div>
+      <div class="panel-title">Enter your personal review policy</div>
 
-      <div class="radio-item">
-        <input type="radio" id="preset4" name="preset" value="p4" />
-        <div class="radio-label">
-          <div class="radio-name">Automated review invitations</div>
-          <div class="radio-pair">
-            <strong>NO:</strong> Automated review invitations<br>
-            <strong>YES:</strong> Legitimate editorial requests
-          </div>
+      <div class="row">
+        <div class="col">
+          <label for="noText">NO text (left)</label>
+          <!-- Multiline input: textarea -->
+          <textarea id="noText">Peer review for paywalls and APCs</textarea>
+        </div>
+        <div class="col">
+          <label for="yesText">YES text (right)</label>
+          <textarea id="yesText">Peer review for diamond open access</textarea>
         </div>
       </div>
     </div>
 
-    <div class="section-title">Or enter your personal message</div>
+    <!-- 3) Header and footer -->
+    <h2>Header and footer (optional)</h2>
 
-    <div class="row">
-      <div class="col">
-        <label for="noText">NO text (left)</label>
-        <input id="noText" type="text" value="Peer review for paywalls and APCs" />
+    <div class="panel">
+      <div class="panel-title">Header</div>
+      <div class="option-row">
+        <input id="showHeader" type="checkbox" checked />
+        <label for="showHeader" style="margin:0; font-weight:700;">Add heading text above image</label>
+        <div style="flex: 1 1 520px; min-width: 260px;">
+          <input id="headerText" type="text" value="MY REVIEW POLICY" />
+        </div>
       </div>
-      <div class="col">
-        <label for="yesText">YES text (right)</label>
-        <input id="yesText" type="text" value="Peer review for diamond open access" />
+
+      <div class="panel-title" style="margin-top:14px;">Footer</div>
+      <div class="option-row">
+        <input id="showFooter" type="checkbox" />
+        <label for="showFooter" style="margin:0; font-weight:700;">Add footer text below image</label>
+        <div style="flex: 1 1 520px; min-width: 260px;">
+          <input id="footerText" type="text" value="" placeholder="(optional)" />
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="panel-title">Text size</div>
+      <div class="option-row">
+        <div class="font-control" aria-label="Font size control">
+          <div class="label">Base text size</div>
+          <input id="baseFontSize" class="font-size-box" type="text" inputmode="numeric" value="64" aria-label="Base font size" />
+          <div class="stepper" aria-label="Increase or decrease font size">
+            <button id="fontPlus" type="button" aria-label="Increase font size">+</button>
+            <button id="fontMinus" type="button" aria-label="Decrease font size">−</button>
+          </div>
+        </div>
+        <div class="muted">The generator will still auto-shrink text if it does not fit.</div>
       </div>
     </div>
 
-    <div class="headeropts">
-      <label><input id="showHeader" type="checkbox" checked />Add heading above image</label>
-      <div style="flex: 1 1 420px; min-width: 260px;">
-        <label for="headerText" class="tiny" style="margin-bottom:6px;">Heading text</label>
-        <input id="headerText" type="text" value="MY REVIEW POLICY" />
+    <!-- 4) Output image and actions -->
+    <h2>Output</h2>
+
+    <div class="panel">
+      <div class="panel-title">Your image</div>
+
+      <div class="actions">
+        <button class="action" id="downloadBtn">Download PNG</button>
+        <button class="action" id="copyBtn">Copy image</button>
+        <button class="action" id="sharePageBtn">Share webpage</button>
+        <button class="action" id="copyLinkBtn">Copy link</button>
+        <button class="action" id="shareImageBtn">Share image</button>
+      </div>
+
+      <div class="muted">
+        “Share webpage” uses your device share menu when available. “Share image” uses the share menu if your browser supports sharing files.
+      </div>
+
+      <div style="margin-top:12px;">
+        <canvas id="c"></canvas>
       </div>
     </div>
-
-    <div class="controls">
-      <button id="downloadBtn">Download PNG</button>
-      <button id="copyBtn">Copy image</button>
-      <button id="copyLinkBtn">Copy link</button>
-    </div>
-
-    <canvas id="c"></canvas>
   </div>
 
   <script>
@@ -171,8 +293,8 @@
     const STICKER_W = 1800;
     const STICKER_H = 360;
 
-    // Header band height (only when enabled)
     const HEADER_H = 90;
+    const FOOTER_H = 70;
 
     const COLORS = {
       bg: "#000000",
@@ -181,7 +303,9 @@
       yes: "#00B050",
       text: "#FFFFFF",
       headerBg: "#FFFFFF",
-      headerText: "#000000"
+      headerText: "#000000",
+      footerBg: "#FFFFFF",
+      footerText: "#000000"
     };
 
     const PRESETS = {
@@ -190,8 +314,6 @@
       p3: { no: "Peer review for predatory publishers", yes: "Peer review for legitimate journals" },
       p4: { no: "Automated review invitations", yes: "Legitimate editorial requests" }
     };
-
-    const DEFAULTS = { ...PRESETS.p1 };
 
     // -----------------------
     // DOM
@@ -206,12 +328,21 @@
     const showHeader = document.getElementById("showHeader");
     const headerTextInput = document.getElementById("headerText");
 
+    const showFooter = document.getElementById("showFooter");
+    const footerTextInput = document.getElementById("footerText");
+
+    const baseFontSizeInput = document.getElementById("baseFontSize");
+    const fontPlusBtn = document.getElementById("fontPlus");
+    const fontMinusBtn = document.getElementById("fontMinus");
+
     const downloadBtn = document.getElementById("downloadBtn");
     const copyBtn = document.getElementById("copyBtn");
     const copyLinkBtn = document.getElementById("copyLinkBtn");
+    const sharePageBtn = document.getElementById("sharePageBtn");
+    const shareImageBtn = document.getElementById("shareImageBtn");
 
     // -----------------------
-    // URL params: yes/no/header/showHeader
+    // URL params: yes/no/header/footer/showHeader/showFooter/font
     // -----------------------
     function getParams() {
       const p = new URLSearchParams(window.location.search);
@@ -219,7 +350,10 @@
         yes: p.get("yes"),
         no: p.get("no"),
         header: p.get("header"),
-        showHeader: p.get("showHeader")
+        footer: p.get("footer"),
+        showHeader: p.get("showHeader"),
+        showFooter: p.get("showFooter"),
+        font: p.get("font")
       };
     }
 
@@ -228,7 +362,10 @@
       if (p.yes !== null) yesInput.value = p.yes;
       if (p.no !== null) noInput.value = p.no;
       if (p.header !== null) headerTextInput.value = p.header;
+      if (p.footer !== null) footerTextInput.value = p.footer;
       if (p.showHeader !== null) showHeader.checked = (p.showHeader === "1" || p.showHeader.toLowerCase() === "true");
+      if (p.showFooter !== null) showFooter.checked = (p.showFooter === "1" || p.showFooter.toLowerCase() === "true");
+      if (p.font !== null) baseFontSizeInput.value = p.font;
     }
 
     function updateURL() {
@@ -236,7 +373,10 @@
       p.set("yes", yesInput.value);
       p.set("no", noInput.value);
       p.set("header", headerTextInput.value);
+      p.set("footer", footerTextInput.value);
       p.set("showHeader", showHeader.checked ? "1" : "0");
+      p.set("showFooter", showFooter.checked ? "1" : "0");
+      p.set("font", getBaseFontSize());
       const newUrl = `${window.location.pathname}?${p.toString()}`;
       window.history.replaceState({}, "", newUrl);
     }
@@ -247,18 +387,14 @@
     async function copyLinkRobust() {
       const url = window.location.href;
 
-      // Primary: modern clipboard API
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
           await navigator.clipboard.writeText(url);
           alert("Link copied to clipboard.");
           return;
         }
-      } catch (e) {
-        // fall through to fallback
-      }
+      } catch (e) {}
 
-      // Fallback: execCommand
       try {
         const tmp = document.createElement("textarea");
         tmp.value = url;
@@ -279,37 +415,108 @@
     }
 
     // -----------------------
-    // Text wrapping that preserves multiple spaces
-    // - spaces count as width and can trigger wrapping
+    // Share buttons
+    // -----------------------
+    async function shareWebpage() {
+      const url = window.location.href;
+      const data = { title: document.title, text: "My review policy (#MyReviewPolicy)", url };
+
+      if (!navigator.share) {
+        // fallback: copy link
+        await copyLinkRobust();
+        return;
+      }
+
+      try {
+        await navigator.share(data);
+      } catch (e) {
+        // user cancelled or share failed; no alert needed
+      }
+    }
+
+    function canvasToBlob(canvasEl) {
+      return new Promise((resolve) => canvasEl.toBlob(resolve, "image/png"));
+    }
+
+    async function shareImage() {
+      // Uses Web Share Level 2 (files). Not supported on all desktop browsers.
+      if (!navigator.share || !navigator.canShare) {
+        alert("Sharing an image is not supported in this browser. You can still Download PNG or Copy image.");
+        return;
+      }
+
+      try {
+        const blob = await canvasToBlob(canvas);
+        if (!blob) { alert("Could not create image."); return; }
+
+        const file = new File([blob], "my-review-policy.png", { type: "image/png" });
+        const data = { files: [file], title: "My review policy", text: "#MyReviewPolicy" };
+
+        if (!navigator.canShare(data)) {
+          alert("Sharing an image is not supported in this browser. You can still Download PNG or Copy image.");
+          return;
+        }
+
+        await navigator.share(data);
+      } catch (e) {
+        // user cancelled or share failed; no alert needed
+      }
+    }
+
+    // -----------------------
+    // Text wrapping preserving spaces and newlines
     // -----------------------
     function tokenizePreserveSpaces(s) {
-      // Returns array of tokens: either whitespace runs or non-whitespace runs
-      // Example: "A  B" -> ["A", "  ", "B"]
+      // includes runs of whitespace, including tabs/spaces; does NOT include newline (handled separately)
       return (s || "").match(/(\s+|\S+)/g) || [];
     }
 
-    function wrapTextPreserveSpaces(targetCtx, text, maxWidth, fontSize, maxLines) {
+    function splitPreserveNewlines(text) {
+      // Keep empty lines too
+      return (text || "").split(/\r?\n/);
+    }
+
+    function wrapTextPreserveSpacesAndNewlines(targetCtx, text, maxWidth, fontSize, maxLines) {
       targetCtx.font = `bold ${fontSize}px Arial`;
 
-      const tokens = tokenizePreserveSpaces(text);
+      const paragraphs = splitPreserveNewlines(text);
       const lines = [];
-      let line = "";
 
-      for (const t of tokens) {
-        const test = line + t; // keep spaces exactly as typed
-        if (targetCtx.measureText(test).width <= maxWidth || line.length === 0) {
-          line = test;
-        } else {
-          lines.push(line);
-          line = t.replace(/^\s+/, ""); // avoid starting new line with many spaces
+      for (let pi = 0; pi < paragraphs.length; pi++) {
+        const para = paragraphs[pi];
+        const tokens = tokenizePreserveSpaces(para);
+
+        let line = "";
+
+        // If paragraph is empty, it contributes a blank line
+        if (tokens.length === 0 && para.length === 0) {
+          lines.push("");
+          if (lines.length >= maxLines) return lines.slice(0, maxLines);
+          continue;
         }
-        if (lines.length >= maxLines) break;
+
+        for (const t of tokens) {
+          const test = line + t;
+          if (targetCtx.measureText(test).width <= maxWidth || line.length === 0) {
+            line = test;
+          } else {
+            lines.push(line);
+            line = t.replace(/^\s+/, ""); // avoid starting a line with many spaces
+            if (lines.length >= maxLines) return lines.slice(0, maxLines);
+          }
+        }
+
+        if (line !== "") {
+          lines.push(line);
+          if (lines.length >= maxLines) return lines.slice(0, maxLines);
+        }
+
+        // After each paragraph except last, enforce a newline break
+        if (pi < paragraphs.length - 1) {
+          lines.push("");
+          if (lines.length >= maxLines) return lines.slice(0, maxLines);
+        }
       }
-
-      if (lines.length < maxLines && line !== "") lines.push(line);
-
-      // If still empty (e.g., input was only spaces), keep it as a single "spaces" line
-      if (lines.length === 0 && (text || "").length > 0) lines.push(text);
 
       return lines.slice(0, maxLines);
     }
@@ -317,9 +524,8 @@
     function fitTextToBox(targetCtx, text, maxWidth, maxLines, startSize, minSize) {
       let size = startSize;
       while (size >= minSize) {
-        const lines = wrapTextPreserveSpaces(targetCtx, text, maxWidth, size, maxLines);
+        const lines = wrapTextPreserveSpacesAndNewlines(targetCtx, text, maxWidth, size, maxLines);
 
-        // Ensure each produced line fits; if not, reduce size
         targetCtx.font = `bold ${size}px Arial`;
         let ok = true;
         for (const ln of lines) {
@@ -328,10 +534,10 @@
         if (ok) return { size, lines };
         size -= 2;
       }
-      return { size: minSize, lines: wrapTextPreserveSpaces(targetCtx, text, maxWidth, minSize, maxLines) };
+      return { size: minSize, lines: wrapTextPreserveSpacesAndNewlines(targetCtx, text, maxWidth, minSize, maxLines) };
     }
 
-    // Fit a single shared font size for both "YES" and "NO" labels in their blocks
+    // Fit shared label font size for YES/NO
     function fitLabelFontSize(targetCtx, labelBlockW, innerH) {
       const maxW = labelBlockW * 0.86;
       const maxH = innerH * 0.80;
@@ -341,11 +547,25 @@
         targetCtx.font = `bold ${size}px Arial`;
         const yesW = targetCtx.measureText("YES").width;
         const noW  = targetCtx.measureText("NO").width;
-
         if (yesW <= maxW && noW <= maxW && size <= maxH) return size;
         size -= 2;
       }
       return 20;
+    }
+
+    // -----------------------
+    // Font size control
+    // -----------------------
+    function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
+    function getBaseFontSize() {
+      const n = parseInt(baseFontSizeInput.value, 10);
+      if (!Number.isFinite(n)) return 64;
+      return clamp(n, 24, 120);
+    }
+
+    function setBaseFontSize(n) {
+      baseFontSizeInput.value = clamp(n, 24, 120);
     }
 
     // -----------------------
@@ -356,7 +576,7 @@
       const pad = Math.round(W * 0.015);
       const sepW = Math.max(10, Math.round(W * 0.006));
 
-      // Equal red/green blocks
+      // Equal blocks
       const labelBlockW = Math.round(W * 0.16);
       const innerH = H - 2 * border;
 
@@ -373,7 +593,7 @@
       targetCtx.fillStyle = COLORS.bg;
       targetCtx.fillRect(0, 0, W, H);
 
-      // Outer border
+      // Border
       targetCtx.strokeStyle = COLORS.border;
       targetCtx.lineWidth = border;
       targetCtx.strokeRect(border / 2, border / 2, W - border, H - border);
@@ -382,11 +602,10 @@
       targetCtx.fillStyle = COLORS.border;
       targetCtx.fillRect(xSep, border, sepW, innerH);
 
-      // NO block
+      // Blocks
       targetCtx.fillStyle = COLORS.no;
       targetCtx.fillRect(xNoBlock, border, labelBlockW, innerH);
 
-      // YES block
       targetCtx.fillStyle = COLORS.yes;
       targetCtx.fillRect(xYesBlock, border, labelBlockW, innerH);
 
@@ -394,31 +613,32 @@
       targetCtx.fillStyle = COLORS.text;
       targetCtx.textAlign = "center";
       targetCtx.textBaseline = "middle";
-
       const labelFontSize = fitLabelFontSize(targetCtx, labelBlockW, innerH);
       targetCtx.font = `bold ${labelFontSize}px Arial`;
       targetCtx.fillText("NO", xNoBlock + labelBlockW / 2, H / 2);
       targetCtx.fillText("YES", xYesBlock + labelBlockW / 2, H / 2);
 
-      // NO text area (left aligned)
-      const startSize = Math.round(H * 0.18);
-      const minSize = Math.max(18, Math.round(H * 0.10));
-      const maxLines = 3;
+      // Text areas
+      const baseSize = getBaseFontSize();
+      const startSize = baseSize; // user-set base
+      const minSize = Math.max(18, Math.round(baseSize * 0.5)); // still auto-shrinks below base if needed
+      const maxLines = 4; // allow more since textarea is multiline
       const maxW = textAreaW - 2 * pad;
 
+      // NO: left aligned
       const noFit = fitTextToBox(targetCtx, noInput.value, maxW, maxLines, startSize, minSize);
       targetCtx.font = `bold ${noFit.size}px Arial`;
       targetCtx.fillStyle = COLORS.text;
       targetCtx.textAlign = "left";
       targetCtx.textBaseline = "top";
 
-      let y = border + Math.round(H * 0.18);
+      let y = border + Math.round(H * 0.16);
       for (const line of noFit.lines) {
         targetCtx.fillText(line, xNoText + pad, y);
-        y += noFit.size + Math.round(H * 0.04);
+        y += noFit.size + Math.round(H * 0.035);
       }
 
-      // YES text area (right aligned)
+      // YES: right aligned (requirement)
       const yesFit = fitTextToBox(targetCtx, yesInput.value, maxW, maxLines, startSize, minSize);
       targetCtx.font = `bold ${yesFit.size}px Arial`;
       targetCtx.fillStyle = COLORS.text;
@@ -426,10 +646,10 @@
       targetCtx.textBaseline = "top";
 
       const yesX = xYesText + textAreaW - pad;
-      y = border + Math.round(H * 0.18);
+      y = border + Math.round(H * 0.16);
       for (const line of yesFit.lines) {
         targetCtx.fillText(line, yesX, y);
-        y += yesFit.size + Math.round(H * 0.04);
+        y += yesFit.size + Math.round(H * 0.035);
       }
     }
 
@@ -437,10 +657,7 @@
       targetCtx.fillStyle = COLORS.headerBg;
       targetCtx.fillRect(0, 0, W, headerH);
 
-      const padY = Math.round(headerH * 0.18);
       const maxW = Math.round(W * 0.92);
-
-      // Fit header text horizontally; single line
       let size = Math.round(headerH * 0.55);
       while (size > 18) {
         targetCtx.font = `bold ${size}px Arial`;
@@ -452,24 +669,57 @@
       targetCtx.textAlign = "center";
       targetCtx.textBaseline = "middle";
       targetCtx.font = `bold ${size}px Arial`;
-      targetCtx.fillText(headerTextInput.value, W / 2, headerH / 2 + padY * 0.05);
+      targetCtx.fillText(headerTextInput.value, W / 2, headerH / 2);
+    }
+
+    function drawFooterBand(targetCtx, W, footerH, yOffset) {
+      targetCtx.fillStyle = COLORS.footerBg;
+      targetCtx.fillRect(0, yOffset, W, footerH);
+
+      const text = footerTextInput.value || "";
+      const maxW = Math.round(W * 0.92);
+
+      let size = Math.round(footerH * 0.42);
+      while (size > 14) {
+        targetCtx.font = `bold ${size}px Arial`;
+        if (targetCtx.measureText(text).width <= maxW) break;
+        size -= 2;
+      }
+
+      targetCtx.fillStyle = COLORS.footerText;
+      targetCtx.textAlign = "center";
+      targetCtx.textBaseline = "middle";
+      targetCtx.font = `bold ${size}px Arial`;
+      targetCtx.fillText(text, W / 2, yOffset + footerH / 2);
     }
 
     function setCanvasSizeAndRender() {
-      const totalH = showHeader.checked ? (HEADER_H + STICKER_H) : STICKER_H;
+      const hasHeader = showHeader.checked;
+      const hasFooter = showFooter.checked;
+
+      const totalH = (hasHeader ? HEADER_H : 0) + STICKER_H + (hasFooter ? FOOTER_H : 0);
+
       canvas.width = STICKER_W;
       canvas.height = totalH;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (showHeader.checked) {
+      let y = 0;
+
+      if (hasHeader) {
         drawHeaderBand(ctx, STICKER_W, HEADER_H);
-        ctx.save();
-        ctx.translate(0, HEADER_H);
-        drawSticker(ctx, STICKER_W, STICKER_H);
-        ctx.restore();
-      } else {
-        drawSticker(ctx, STICKER_W, STICKER_H);
+        y += HEADER_H;
+      }
+
+      ctx.save();
+      ctx.translate(0, y);
+      drawSticker(ctx, STICKER_W, STICKER_H);
+      ctx.restore();
+
+      y += STICKER_H;
+
+      if (hasFooter) {
+        drawFooterBand(ctx, STICKER_W, FOOTER_H, y);
       }
     }
 
@@ -490,10 +740,7 @@
           return;
         }
         const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-        if (!blob) {
-          alert("Could not create image blob.");
-          return;
-        }
+        if (!blob) { alert("Could not create image blob."); return; }
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
         alert("Image copied to clipboard.");
       } catch (e) {
@@ -512,10 +759,59 @@
       yesInput.value = p.yes;
     }
 
-    // If user edits text manually, do not force-uncheck radio; user may want to start from preset
+    // -----------------------
+    // Share / link / state
+    // -----------------------
     function onAnyChange() {
       updateURL();
       setCanvasSizeAndRender();
+    }
+
+    async function shareWebpage() {
+      const url = window.location.href;
+      const data = { title: document.title, text: "My review policy (#MyReviewPolicy)", url };
+
+      if (!navigator.share) {
+        await copyLinkRobust();
+        return;
+      }
+
+      try { await navigator.share(data); } catch (e) {}
+    }
+
+    function canvasToBlob(canvasEl) {
+      return new Promise((resolve) => canvasEl.toBlob(resolve, "image/png"));
+    }
+
+    async function shareImage() {
+      if (!navigator.share || !navigator.canShare) {
+        alert("Sharing an image is not supported in this browser. You can still Download PNG or Copy image.");
+        return;
+      }
+
+      try {
+        const blob = await canvasToBlob(canvas);
+        if (!blob) { alert("Could not create image."); return; }
+
+        const file = new File([blob], "my-review-policy.png", { type: "image/png" });
+        const data = { files: [file], title: "My review policy", text: "#MyReviewPolicy" };
+
+        if (!navigator.canShare(data)) {
+          alert("Sharing an image is not supported in this browser. You can still Download PNG or Copy image.");
+          return;
+        }
+
+        await navigator.share(data);
+      } catch (e) {}
+    }
+
+    // -----------------------
+    // Font stepper events
+    // -----------------------
+    function bumpFont(delta) {
+      const cur = getBaseFontSize();
+      setBaseFontSize(cur + delta);
+      onAnyChange();
     }
 
     // -----------------------
@@ -534,6 +830,20 @@
     showHeader.addEventListener("change", onAnyChange);
     headerTextInput.addEventListener("input", onAnyChange);
 
+    showFooter.addEventListener("change", onAnyChange);
+    footerTextInput.addEventListener("input", onAnyChange);
+
+    baseFontSizeInput.addEventListener("input", () => {
+      // sanitize live without being annoying
+      const n = parseInt(baseFontSizeInput.value, 10);
+      if (!Number.isFinite(n)) return;
+      setBaseFontSize(n);
+      onAnyChange();
+    });
+
+    fontPlusBtn.addEventListener("click", () => bumpFont(+2));
+    fontMinusBtn.addEventListener("click", () => bumpFont(-2));
+
     presetRadios.forEach(radio => {
       radio.addEventListener("change", () => {
         applyPresetKey(radio.value);
@@ -543,7 +853,11 @@
 
     downloadBtn.addEventListener("click", downloadPNG);
     copyBtn.addEventListener("click", copyImage);
+    sharePageBtn.addEventListener("click", shareWebpage);
+
     copyLinkBtn.addEventListener("click", copyLinkRobust);
+    // share image must be after copy link (per your requirement)
+    shareImageBtn.addEventListener("click", shareImage);
 
     window.addEventListener("resize", () => setCanvasSizeAndRender());
   </script>
