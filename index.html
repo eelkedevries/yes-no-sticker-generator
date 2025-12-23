@@ -52,7 +52,6 @@
     textarea { resize: vertical; min-height: 90px; }
 
     .radio-group { display: grid; gap: 8px; margin-top: 8px; }
-    /* If there is enough space, show 2x2 grid */
     @media (min-width: 900px) {
       .radio-group { grid-template-columns: 1fr 1fr; }
     }
@@ -108,6 +107,15 @@
     }
     .stepper button:active { transform: translateY(1px); }
 
+    .adjusters-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: nowrap;
+      align-items: center;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
     .actions {
       display: flex;
       gap: 10px;
@@ -139,8 +147,8 @@
     }
 
     canvas { width: 100%; border: 1px solid #ddd; border-radius: 12px; display: block; background: #fff; }
-    .muted { font-size: 13px; color: #444; margin-top: 6px; }
 
+    .muted { font-size: 13px; color: #444; margin-top: 6px; }
     .inline-grow { flex: 1 1 520px; min-width: 260px; }
   </style>
 </head>
@@ -232,20 +240,6 @@
           <textarea id="yesText">Peer review for diamond open access</textarea>
         </div>
       </div>
-
-      <div class="divider"></div>
-
-      <div class="panel-title">Text size</div>
-      <div class="option-row">
-        <div class="font-control" aria-label="Font size control">
-          <div class="label">Text size</div>
-          <input id="baseFontSize" class="font-size-box" type="text" inputmode="numeric" value="64" aria-label="Text size" />
-          <div class="stepper" aria-label="Increase or decrease font size">
-            <button id="fontPlus" type="button" aria-label="Increase font size">+</button>
-            <button id="fontMinus" type="button" aria-label="Decrease font size">−</button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <h2>Header and footer (optional)</h2>
@@ -255,18 +249,8 @@
       <div class="option-row">
         <input id="showHeader" type="checkbox" checked />
         <label for="showHeader" style="margin:0; font-weight:700;">Add heading text above image</label>
-
         <div class="inline-grow">
           <input id="headerText" type="text" value="MY REVIEW POLICY" />
-        </div>
-
-        <div class="font-control" aria-label="Header font size control">
-          <div class="label">Size</div>
-          <input id="headerFontSize" class="font-size-box" type="text" inputmode="numeric" value="45" aria-label="Header text size" />
-          <div class="stepper" aria-label="Increase or decrease header font size">
-            <button id="headerPlus" type="button" aria-label="Increase header font size">+</button>
-            <button id="headerMinus" type="button" aria-label="Decrease header font size">−</button>
-          </div>
         </div>
       </div>
 
@@ -274,13 +258,38 @@
       <div class="option-row">
         <input id="showFooter" type="checkbox" />
         <label for="showFooter" style="margin:0; font-weight:700;">Add footer text below image</label>
-
         <div class="inline-grow">
           <input id="footerText" type="text" value="" placeholder="(optional)" />
         </div>
+      </div>
+    </div>
+
+    <!-- NEW: Adjust text sizes section (3 adjusters on one line) -->
+    <h2>Adjust text sizes</h2>
+
+    <div class="panel">
+      <div class="panel-title">Adjust text sizes</div>
+      <div class="adjusters-row" aria-label="Adjust text sizes">
+        <div class="font-control" aria-label="Policy text size control">
+          <div class="label">Policy text</div>
+          <input id="baseFontSize" class="font-size-box" type="text" inputmode="numeric" value="64" aria-label="Policy text size" />
+          <div class="stepper" aria-label="Increase or decrease policy text size">
+            <button id="fontPlus" type="button" aria-label="Increase policy text size">+</button>
+            <button id="fontMinus" type="button" aria-label="Decrease policy text size">−</button>
+          </div>
+        </div>
+
+        <div class="font-control" aria-label="Header font size control">
+          <div class="label">Header</div>
+          <input id="headerFontSize" class="font-size-box" type="text" inputmode="numeric" value="45" aria-label="Header text size" />
+          <div class="stepper" aria-label="Increase or decrease header font size">
+            <button id="headerPlus" type="button" aria-label="Increase header font size">+</button>
+            <button id="headerMinus" type="button" aria-label="Decrease header font size">−</button>
+          </div>
+        </div>
 
         <div class="font-control" aria-label="Footer font size control">
-          <div class="label">Size</div>
+          <div class="label">Footer</div>
           <input id="footerFontSize" class="font-size-box" type="text" inputmode="numeric" value="40" aria-label="Footer text size" />
           <div class="stepper" aria-label="Increase or decrease footer font size">
             <button id="footerPlus" type="button" aria-label="Increase footer font size">+</button>
@@ -302,14 +311,8 @@
       <div class="actions">
         <button class="action" id="downloadBtn">Download PNG</button>
         <button class="action" id="copyBtn">Copy image</button>
-        <button class="action" id="sharePageBtn">Share webpage</button>
         <button class="action" id="copyLinkBtn">Copy link</button>
-        <button class="action" id="shareImageBtn">Share image</button>
         <button class="action" id="clearBtn">Clear</button>
-      </div>
-
-      <div class="muted">
-        If “Share image” is not supported by your browser, use Download PNG or Copy image.
       </div>
 
       <div style="margin-top:12px;">
@@ -330,7 +333,8 @@
 
     const COLORS = {
       bg: "#000000",
-      border: "#FFFFFF",
+      outline: "#000000",      // NEW: black outline around sticker only
+      sep: "#FFFFFF",          // keep white separator
       no: "#E53935",
       yes: "#00B050",
       text: "#FFFFFF",
@@ -347,16 +351,14 @@
       p4: { no: "Automated review invitations", yes: "Legitimate editorial requests" }
     };
 
-    // Defaults:
-    // - header font should be 30% smaller than YES/NO default (64 -> 45)
     const DEFAULT_STATE = {
       preset: "",
       noText: PRESETS.p1.no,
       yesText: PRESETS.p1.yes,
-      baseFontSize: 64,
+      policyFontSize: 64,
       showHeader: true,
       headerText: "MY REVIEW POLICY",
-      headerFontSize: 45, // 64 * 0.7 ≈ 44.8
+      headerFontSize: 45, // policy * 0.7
       showFooter: false,
       footerText: "",
       footerFontSize: 40
@@ -372,19 +374,20 @@
     const yesInput = document.getElementById("yesText");
     const presetRadios = Array.from(document.querySelectorAll('input[name="preset"]'));
 
-    const baseFontSizeInput = document.getElementById("baseFontSize");
-    const fontPlusBtn = document.getElementById("fontPlus");
-    const fontMinusBtn = document.getElementById("fontMinus");
-
     const showHeader = document.getElementById("showHeader");
     const headerTextInput = document.getElementById("headerText");
-    const headerFontSizeInput = document.getElementById("headerFontSize");
-    const headerPlusBtn = document.getElementById("headerPlus");
-    const headerMinusBtn = document.getElementById("headerMinus");
 
     const showFooter = document.getElementById("showFooter");
     const footerTextInput = document.getElementById("footerText");
+
+    const baseFontSizeInput = document.getElementById("baseFontSize");
+    const headerFontSizeInput = document.getElementById("headerFontSize");
     const footerFontSizeInput = document.getElementById("footerFontSize");
+
+    const fontPlusBtn = document.getElementById("fontPlus");
+    const fontMinusBtn = document.getElementById("fontMinus");
+    const headerPlusBtn = document.getElementById("headerPlus");
+    const headerMinusBtn = document.getElementById("headerMinus");
     const footerPlusBtn = document.getElementById("footerPlus");
     const footerMinusBtn = document.getElementById("footerMinus");
 
@@ -393,22 +396,19 @@
     const downloadBtn = document.getElementById("downloadBtn");
     const copyBtn = document.getElementById("copyBtn");
     const copyLinkBtn = document.getElementById("copyLinkBtn");
-    const sharePageBtn = document.getElementById("sharePageBtn");
-    const shareImageBtn = document.getElementById("shareImageBtn");
     const clearBtn = document.getElementById("clearBtn");
 
     // -----------------------
     // Helpers
     // -----------------------
     function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
-
     function parseIntOr(fallback, v) {
       const n = parseInt(v, 10);
       return Number.isFinite(n) ? n : fallback;
     }
 
-    function getBaseFontSize() { return clamp(parseIntOr(DEFAULT_STATE.baseFontSize, baseFontSizeInput.value), 10, 140); }
-    function setBaseFontSize(n) { baseFontSizeInput.value = clamp(n, 10, 140); }
+    function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontSize, baseFontSizeInput.value), 10, 140); }
+    function setPolicyFontSize(n) { baseFontSizeInput.value = clamp(n, 10, 140); }
 
     function getHeaderFontSize() { return clamp(parseIntOr(DEFAULT_STATE.headerFontSize, headerFontSizeInput.value), 10, 140); }
     function setHeaderFontSize(n) { headerFontSizeInput.value = clamp(n, 10, 140); }
@@ -416,9 +416,9 @@
     function getFooterFontSize() { return clamp(parseIntOr(DEFAULT_STATE.footerFontSize, footerFontSizeInput.value), 10, 140); }
     function setFooterFontSize(n) { footerFontSizeInput.value = clamp(n, 10, 140); }
 
-    function bumpFont(delta) { setBaseFontSize(getBaseFontSize() + delta); renderAll(); }
-    function bumpHeaderFont(delta) { setHeaderFontSize(getHeaderFontSize() + delta); renderAll(); }
-    function bumpFooterFont(delta) { setFooterFontSize(getFooterFontSize() + delta); renderAll(); }
+    function bumpPolicy(delta) { setPolicyFontSize(getPolicyFontSize() + delta); renderAll(); }
+    function bumpHeader(delta) { setHeaderFontSize(getHeaderFontSize() + delta); renderAll(); }
+    function bumpFooter(delta) { setFooterFontSize(getFooterFontSize() + delta); renderAll(); }
 
     // -----------------------
     // Wrapping preserving spaces/newlines + breaking long words
@@ -477,7 +477,6 @@
       return lines;
     }
 
-    // Draw clipped text block; returns overflow flag (vertical or unexpected horizontal)
     function drawTextBlockClipped(opts) {
       const { ctx, text, x, y, w, h, fontSize, lineGap, align, fillStyle } = opts;
 
@@ -510,7 +509,6 @@
 
       ctx.restore();
 
-      // Safety check for horizontal overflow (should not happen due to wrapping + breaking)
       ctx.font = `bold ${fontSize}px Arial`;
       let willOverflowHoriz = false;
       for (const ln of lines) {
@@ -542,7 +540,6 @@
       ctx.fillStyle = COLORS.headerBg;
       ctx.fillRect(0, 0, W, headerH);
 
-      // clip + overflow check
       ctx.save();
       ctx.beginPath();
       ctx.rect(0, 0, W, headerH);
@@ -581,10 +578,13 @@
       return { overflow };
     }
 
-    function drawSticker(ctx, W, H, baseFontSize) {
-      const border = Math.max(10, Math.round(W * 0.006));
+    function drawSticker(ctx, W, H, policyFontSize) {
+      const sepW = Math.max(10, Math.round(W * 0.006));   // white separator thickness
+      const outlineW = sepW;                               // NEW: outline thickness equals separator
       const pad = Math.round(W * 0.015);
-      const sepW = Math.max(10, Math.round(W * 0.006));
+
+      // Border/outline ONLY around sticker area (not around header/footer)
+      const border = outlineW;
 
       const labelBlockW = Math.round(W * 0.16);
       const innerH = H - 2 * border;
@@ -598,16 +598,17 @@
       const xYesText = xSep + sepW;
       const xYesBlock = xYesText + textAreaW;
 
-      // Background + border
+      // Background
       ctx.fillStyle = COLORS.bg;
       ctx.fillRect(0, 0, W, H);
 
-      ctx.strokeStyle = COLORS.border;
+      // Black outline
+      ctx.strokeStyle = COLORS.outline;
       ctx.lineWidth = border;
       ctx.strokeRect(border / 2, border / 2, W - border, H - border);
 
-      // Separator
-      ctx.fillStyle = COLORS.border;
+      // Separator (white)
+      ctx.fillStyle = COLORS.sep;
       ctx.fillRect(xSep, border, sepW, innerH);
 
       // Blocks
@@ -626,10 +627,10 @@
       ctx.fillText("NO", xNoBlock + labelBlockW / 2, H / 2);
       ctx.fillText("YES", xYesBlock + labelBlockW / 2, H / 2);
 
-      // Text areas (no auto-shrink; clipped)
+      // Text areas (clipped, no shrink)
       const startY = border + Math.round(H * 0.16);
       const boxH = innerH - Math.round(H * 0.16) - Math.round(H * 0.10);
-      const lineGap = Math.round(baseFontSize * 0.18);
+      const lineGap = Math.round(policyFontSize * 0.18);
 
       const noOverflow = drawTextBlockClipped({
         ctx,
@@ -638,7 +639,7 @@
         y: startY,
         w: textAreaW - 2 * pad,
         h: boxH,
-        fontSize: baseFontSize,
+        fontSize: policyFontSize,
         lineGap,
         align: "left",
         fillStyle: COLORS.text
@@ -651,7 +652,7 @@
         y: startY,
         w: textAreaW - 2 * pad,
         h: boxH,
-        fontSize: baseFontSize,
+        fontSize: policyFontSize,
         lineGap,
         align: "right",
         fillStyle: COLORS.text
@@ -681,7 +682,7 @@
 
       ctx.save();
       ctx.translate(0, y);
-      const stickerOverflow = drawSticker(ctx, STICKER_W, STICKER_H, getBaseFontSize());
+      const stickerOverflow = drawSticker(ctx, STICKER_W, STICKER_H, getPolicyFontSize());
       overflow = overflow || stickerOverflow.overflow;
       ctx.restore();
 
@@ -696,7 +697,7 @@
     }
 
     // -----------------------
-    // State / defaults
+    // Defaults
     // -----------------------
     function clearPresetSelection() { presetRadios.forEach(r => r.checked = false); }
 
@@ -712,7 +713,7 @@
       noInput.value = DEFAULT_STATE.noText;
       yesInput.value = DEFAULT_STATE.yesText;
 
-      setBaseFontSize(DEFAULT_STATE.baseFontSize);
+      setPolicyFontSize(DEFAULT_STATE.policyFontSize);
 
       showHeader.checked = DEFAULT_STATE.showHeader;
       headerTextInput.value = DEFAULT_STATE.headerText;
@@ -783,60 +784,6 @@
     }
 
     // -----------------------
-    // Share buttons
-    // -----------------------
-    async function shareWebpage() {
-      const url = window.location.origin + window.location.pathname;
-      const data = { title: document.title, text: "My review policy (#MyReviewPolicy)", url };
-
-      if (!navigator.share) {
-        await copyLinkRobust();
-        return;
-      }
-      try { await navigator.share(data); } catch (e) {}
-    }
-
-    function canvasToBlob(canvasEl) {
-      return new Promise((resolve) => canvasEl.toBlob(resolve, "image/png"));
-    }
-
-    async function shareImage() {
-      // Strategy:
-      // 1) If file sharing is supported -> share File (best)
-      // 2) Else, try sharing an object URL as a regular URL (works in some browsers)
-      // 3) Else, fall back to Download PNG
-      if (!navigator.share) {
-        downloadPNG();
-        return;
-      }
-
-      try {
-        const blob = await canvasToBlob(canvas);
-        if (!blob) { downloadPNG(); return; }
-
-        const file = new File([blob], "my-review-policy.png", { type: "image/png" });
-
-        // Prefer Web Share Level 2 (files)
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: "My review policy", text: "#MyReviewPolicy" });
-          return;
-        }
-
-        // Fallback: share a temporary object URL
-        const objUrl = URL.createObjectURL(blob);
-        try {
-          await navigator.share({ title: "My review policy", text: "#MyReviewPolicy", url: objUrl });
-        } finally {
-          // Revoke after a short delay (some share UIs read the URL asynchronously)
-          setTimeout(() => URL.revokeObjectURL(objUrl), 5000);
-        }
-      } catch (e) {
-        // Last resort: download
-        downloadPNG();
-      }
-    }
-
-    // -----------------------
     // Events
     // -----------------------
     function onAnyChange() { renderAll(); }
@@ -848,29 +795,30 @@
     noInput.addEventListener("input", onAnyChange);
     yesInput.addEventListener("input", onAnyChange);
 
-    baseFontSizeInput.addEventListener("input", () => { setBaseFontSize(getBaseFontSize()); onAnyChange(); });
-    fontPlusBtn.addEventListener("click", () => bumpFont(+2));
-    fontMinusBtn.addEventListener("click", () => bumpFont(-2));
-
     showHeader.addEventListener("change", onAnyChange);
     headerTextInput.addEventListener("input", onAnyChange);
-    headerFontSizeInput.addEventListener("input", () => { setHeaderFontSize(getHeaderFontSize()); onAnyChange(); });
-    headerPlusBtn.addEventListener("click", () => bumpHeaderFont(+2));
-    headerMinusBtn.addEventListener("click", () => bumpHeaderFont(-2));
 
     showFooter.addEventListener("change", onAnyChange);
     footerTextInput.addEventListener("input", onAnyChange);
+
+    baseFontSizeInput.addEventListener("input", () => { setPolicyFontSize(getPolicyFontSize()); onAnyChange(); });
+    headerFontSizeInput.addEventListener("input", () => { setHeaderFontSize(getHeaderFontSize()); onAnyChange(); });
     footerFontSizeInput.addEventListener("input", () => { setFooterFontSize(getFooterFontSize()); onAnyChange(); });
-    footerPlusBtn.addEventListener("click", () => bumpFooterFont(+2));
-    footerMinusBtn.addEventListener("click", () => bumpFooterFont(-2));
+
+    fontPlusBtn.addEventListener("click", () => bumpPolicy(+2));
+    fontMinusBtn.addEventListener("click", () => bumpPolicy(-2));
+
+    headerPlusBtn.addEventListener("click", () => bumpHeader(+2));
+    headerMinusBtn.addEventListener("click", () => bumpHeader(-2));
+
+    footerPlusBtn.addEventListener("click", () => bumpFooter(+2));
+    footerMinusBtn.addEventListener("click", () => bumpFooter(-2));
 
     downloadBtn.addEventListener("click", downloadPNG);
     copyBtn.addEventListener("click", copyImage);
-    sharePageBtn.addEventListener("click", shareWebpage);
     copyLinkBtn.addEventListener("click", copyLinkRobust);
-    shareImageBtn.addEventListener("click", shareImage);
-
     clearBtn.addEventListener("click", setDefaults);
+
     window.addEventListener("resize", setCanvasSizeAndRender);
 
     // Init: always reset to defaults on reload
