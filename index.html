@@ -43,7 +43,7 @@
     .subsection {
       margin-top: 18px;
       padding-top: 14px;
-      border-top: 1px solid #e6e6e6;
+      border-top: none;
     }
     .subsection:first-of-type {
       margin-top: 0;
@@ -58,7 +58,17 @@
     }
 
 
-    .row { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; align-items: flex-start; }
+
+    .section-box{
+      border: 1px solid #d7dee9;
+      border-radius: 12px;
+      padding: 12px 12px;
+      background: #f7f8fa;
+      margin: 0;
+    }
+    .section-box--hf{ background: #f7f8fa; }
+    .section-box--sizes{ background: #f7f8fa; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; align-items: flex-start; }
     .col { flex: 1 1 420px; }
 
     label { display: block; font-size: 14px; margin-bottom: 6px; }
@@ -97,37 +107,51 @@
     .option-row input[type="checkbox"] { transform: translateY(1px); }
 
     .font-control {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      background: #fafafa;
-    }
-    .font-control .label { font-size: 14px; font-weight: 700; color: #111; }
-    .font-size-box {
-      width: 70px;
-      text-align: center;
-      font-size: 16px;
-    }
-    .stepper {
-      display: inline-flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .stepper button {
-      width: 36px;
-      height: 32px;
-      padding: 0;
-      font-size: 18px;
-      line-height: 1;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #fff;
-      cursor: pointer;
-    }
-    .stepper button:active { transform: translateY(1px); }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fafafa;
+}
+.font-control .label { font-size: 14px; font-weight: 700; color: #111; }
+.font-control-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.font-size-box {
+  width: 70px;
+  text-align: center;
+  font-size: 16px;
+}
+.stepper {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stepper button {
+  width: 36px;
+  height: 32px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+.stepper button:active { transform: translateY(1px); }
+.stepper button:disabled {
+  background: #f0f0f0;
+  color: #888;
+  border-color: #ddd;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
 
     .adjusters-row {
       display: flex;
@@ -140,13 +164,16 @@
 
     .actions {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 8px;
+      flex-wrap: nowrap;
       margin: 10px 0 0 0;
+      overflow-x: auto;
+      padding-bottom: 4px;
     }
     button.action {
-      padding: 10px 14px;
-      font-size: 16px;
+      padding: 8px 10px;
+      font-size: 14px;
+      white-space: nowrap;
       cursor: pointer;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -171,7 +198,7 @@
     }
 
 
-    .divider { height: 1px; background: #eee; margin: 14px 0; }
+    .divider { display: none; }
 
     .warning {
       display: none;
@@ -185,10 +212,66 @@
       line-height: 1.35;
     }
 
-    canvas { width: 100%; border: 1px solid #ddd; border-radius: 0; display: block; background: transparent; }
+
+    .limit-msg {
+      display: none;
+      color: #b00000;
+      font-size: 14px;
+      margin-top: 10px;
+      line-height: 1.35;
+    }
+
+    canvas { width: 100%; border: 1px solid #ddd; border-radius: 0; display: block; background: transparent; cursor: zoom-in; }
     canvas.rc-on { border-radius: 12px; }
 
     .inline-grow { flex: 1 1 520px; min-width: 260px; }
+  
+
+/* Lightbox (enlarged preview) */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.lightbox.open { display: flex; }
+.lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+}
+.lightbox-content {
+  position: relative;
+  z-index: 1;
+  max-width: 96vw;
+  max-height: 96vh;
+  padding: 16px;
+}
+.lightbox-img {
+  display: block;
+  max-width: 96vw;
+  max-height: 96vh;
+  height: auto;
+  width: auto;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+.lightbox-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+.lightbox-close:active { transform: translateY(1px); }
   </style>
 </head>
 
@@ -218,8 +301,7 @@
     </div>
 
 <div class="panel" id="imagePanel">
-      <h2 class="section-heading">Current image</h2>
-      <div id="overflowWarning" class="warning" role="status" aria-live="polite">
+<div id="overflowWarning" class="warning" role="status" aria-live="polite">
         Some text does not fit in the image at the current font sizes. Reduce the relevant font size, shorten the text, or disable header/footer.
       </div>
 
@@ -259,6 +341,7 @@
 
       <div class="divider"></div>
 <div class="subsection">
+<div class="section-box section-box--hf">
 <div class="option-row">
         <input id="showHeader" type="checkbox" checked />
         <label for="showHeader" style="margin:0; font-weight:700;">Add heading text on image</label>
@@ -274,41 +357,53 @@
           <input id="footerText" type="text" value="" placeholder="(optional)" />
         </div>
       </div>
+</div>
     </div>
 
     
 
 <div class="subsection">
-      <h3 class="subheading">Adjust text sizes</h3>
-            <div class="adjusters-row" aria-label="Adjust text sizes">
-        <div class="font-control" aria-label="Policy text size control">
-          <div class="label">Policy text</div>
-          <input id="baseFontSize" class="font-size-box" type="text" inputmode="numeric" value="64" aria-label="Policy text size" />
-          <div class="stepper" aria-label="Increase or decrease policy text size">
-            <button id="fontPlus" type="button" aria-label="Increase policy text size">+</button>
-            <button id="fontMinus" type="button" aria-label="Decrease policy text size">−</button>
+      <div class="section-box section-box--sizes">
+        <h3 class="subheading">Adjust text sizes</h3>
+        <div class="adjusters-row" aria-label="Adjust text sizes">
+        <div class="font-control" aria-label="Policy font size control">
+          <div class="label">Policy</div>
+          <div class="font-control-row">
+            <input id="baseFontSize" class="font-size-box" type="text" inputmode="numeric" value="64" aria-label="Policy text size" />
+            <div class="stepper" aria-label="Increase or decrease policy font size">
+              <button id="fontPlus" type="button" aria-label="Increase policy font size">+</button>
+              <button id="fontMinus" type="button" aria-label="Decrease policy font size">−</button>
+            </div>
           </div>
         </div>
 
         <div class="font-control" aria-label="Header font size control">
           <div class="label">Header</div>
-          <input id="headerFontSize" class="font-size-box" type="text" inputmode="numeric" value="40" aria-label="Header text size" />
-          <div class="stepper" aria-label="Increase or decrease header font size">
-            <button id="headerPlus" type="button" aria-label="Increase header font size">+</button>
-            <button id="headerMinus" type="button" aria-label="Decrease header font size">−</button>
+          <div class="font-control-row">
+            <input id="headerFontSize" class="font-size-box" type="text" inputmode="numeric" value="40" aria-label="Header text size" />
+            <div class="stepper" aria-label="Increase or decrease header font size">
+              <button id="headerPlus" type="button" aria-label="Increase header font size">+</button>
+              <button id="headerMinus" type="button" aria-label="Decrease header font size">−</button>
+            </div>
           </div>
         </div>
 
         <div class="font-control" aria-label="Footer font size control">
           <div class="label">Footer</div>
-          <input id="footerFontSize" class="font-size-box" type="text" inputmode="numeric" value="40" aria-label="Footer text size" />
-          <div class="stepper" aria-label="Increase or decrease footer font size">
-            <button id="footerPlus" type="button" aria-label="Increase footer font size">+</button>
-            <button id="footerMinus" type="button" aria-label="Decrease footer font size">−</button>
+          <div class="font-control-row">
+            <input id="footerFontSize" class="font-size-box" type="text" inputmode="numeric" value="40" aria-label="Footer text size" />
+            <div class="stepper" aria-label="Increase or decrease footer font size">
+              <button id="footerPlus" type="button" aria-label="Increase footer font size">+</button>
+              <button id="footerMinus" type="button" aria-label="Decrease footer font size">−</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      <div id="textSizeLimitMsg" class="limit-msg" role="status" aria-live="polite"></div>
+    
+
+    
     </div>
   </div>
 
@@ -323,7 +418,7 @@
     // Public "read more" link (update to your project page)
     const READ_MORE_URL = "https://github.com/eelkedevries/my-review-policy";
     const HEADER_H = 90;
-    const FOOTER_H = 70;
+    const FOOTER_MIN_H = 70;
 
     const COLORS = {
       bg: "#000000",
@@ -362,6 +457,38 @@
     const canvas = document.getElementById("c");
     const ctx = canvas.getContext("2d");
 
+    // Offscreen canvas for robust "fit" checks (prevents font-size controls from exceeding available space)
+    const fitCanvas = document.createElement("canvas");
+    fitCanvas.width = STICKER_W;
+    fitCanvas.height = STICKER_H;
+    const fitCtx = fitCanvas.getContext("2d");
+
+    let currentMaxPolicyFontSize = 140;
+    let currentMaxHeaderFontSize = 140;
+
+
+
+// Lightbox DOM (optional; guarded to avoid breaking initial render)
+const lightbox = document.getElementById("lightbox");
+const lightboxBackdrop = document.getElementById("lightboxBackdrop");
+const lightboxClose = document.getElementById("lightboxClose");
+const lightboxImg = document.getElementById("lightboxImg");
+
+function openLightbox() {
+  if (!lightbox || !lightboxImg) return;
+  try { lightboxImg.src = canvas.toDataURL("image/png"); } catch (e) {}
+  lightbox.classList.add("open");
+  lightbox.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeLightbox() {
+  if (!lightbox) return;
+  lightbox.classList.remove("open");
+  lightbox.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
 
     const readMoreLink = document.getElementById("readMoreLink");
     const noInput = document.getElementById("noText");
@@ -388,6 +515,7 @@
     const footerMinusBtn = document.getElementById("footerMinus");
 
     const overflowWarning = document.getElementById("overflowWarning");
+    const textSizeLimitMsg = document.getElementById("textSizeLimitMsg");
 
     const downloadBtn = document.getElementById("downloadBtn");
     const copyBtn = document.getElementById("copyBtn");
@@ -402,6 +530,79 @@
       const n = parseInt(v, 10);
       return Number.isFinite(n) ? n : fallback;
     }
+
+    // Fast string hash for cache keys (FNV-1a, 32-bit)
+    function fnv1a(str) {
+      str = String(str ?? "");
+      let h = 2166136261;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return h >>> 0;
+    }
+
+    // Cache max font sizes so we do not recompute expensive "fit" bounds on every render.
+    const _maxCache = {
+      policyKey: null,
+      policyVal: 140,
+      headerKey: null,
+      headerVal: 140
+    };
+
+    function hasInImageTitle() {
+      return !!(showHeader && showHeader.checked && headerTextInput && headerTextInput.value.trim().length > 0);
+    }
+
+    function showSizeLimitMessage(msg) {
+      if (!textSizeLimitMsg) return;
+      textSizeLimitMsg.textContent = msg;
+      textSizeLimitMsg.style.display = "block";
+    }
+    function clearSizeLimitMessage() {
+      if (!textSizeLimitMsg) return;
+      textSizeLimitMsg.textContent = "";
+      textSizeLimitMsg.style.display = "none";
+    }
+
+
+    function refreshSizeLimitMessage(maxPolicy, maxHeader) {
+      // Show a persistent explanation when the user is at the maximum size for the available space.
+      // We suppress the message for the initial policy auto-fit state.
+      const hasTitle = (showHeader && showHeader.checked) && (headerTextInput && headerTextInput.value.trim().length > 0);
+
+      const atPolicyMax = (getPolicyFontSize() >= (maxPolicy - 0.0001));
+      const atHeaderMax = hasTitle && (getHeaderFontSize() >= (maxHeader - 0.0001));
+
+      if (atPolicyMax && atHeaderMax) {
+        showSizeLimitMessage("Heading and policy text sizes cannot be increased further because they would not fit in the image.");
+        return;
+      }
+      if (atPolicyMax) {
+        showSizeLimitMessage("Policy text size cannot be increased further because it would not fit in the image.");
+        return;
+      }
+      if (atHeaderMax) {
+        showSizeLimitMessage("Heading text size cannot be increased further because it would not fit in the image.");
+        return;
+      }
+      clearSizeLimitMessage();
+    }
+    function measureSpacedTextGlobal(ctx, text, spacingPx) {
+      const chars = Array.from(text || "");
+      if (chars.length === 0) return 0;
+      let w = 0;
+      for (let i = 0; i < chars.length; i++) {
+        w += ctx.measureText(chars[i]).width;
+        if (i < chars.length - 1) w += spacingPx;
+      }
+      return w;
+    }
+    function getTitleSpacingPxGlobal(sizePx) {
+      return Math.max(4, Math.min(10, Math.round(sizePx * 0.14)));
+    }
+
+
 
     
     
@@ -419,23 +620,54 @@
     // Auto-fit policy text size until the user manually changes it
     let policyAutoFit = true;
 
-function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontSize, baseFontSizeInput.value), 10, 140); }
-    function setPolicyFontSize(n) { baseFontSizeInput.value = clamp(n, 10, 140); }
+    function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontSize, baseFontSizeInput.value), 10, 140); }
+    function setPolicyFontSize(n, maxOverride) {
+      const max = Number.isFinite(maxOverride) ? maxOverride : computeMaxPolicyFontSize();
+      baseFontSizeInput.value = clamp(n, 10, Math.max(10, Math.min(140, max)));
+    }
 
     function getHeaderFontSize() { return clamp(parseIntOr(DEFAULT_STATE.headerFontSize, headerFontSizeInput.value), 10, 140); }
-    function setHeaderFontSize(n) { headerFontSizeInput.value = clamp(n, 10, 140); }
+    function setHeaderFontSize(n, maxOverride) {
+      const max = Number.isFinite(maxOverride) ? maxOverride : computeMaxHeaderFontSize();
+      headerFontSizeInput.value = clamp(n, 10, Math.max(10, Math.min(140, max)));
+    }
 
     function getFooterFontSize() { return clamp(parseIntOr(DEFAULT_STATE.footerFontSize, footerFontSizeInput.value), 10, 140); }
     function setFooterFontSize(n) { footerFontSizeInput.value = clamp(n, 10, 140); }
 
-    function bumpPolicy(delta) { policyAutoFit = false; setPolicyFontSize(getPolicyFontSize() + delta); renderAll(); }
-    function bumpHeader(delta) { setHeaderFontSize(getHeaderFontSize() + delta); renderAll(); }
-    function bumpFooter(delta) { setFooterFontSize(getFooterFontSize() + delta); renderAll(); }
+    function updateTextSizeStepperStates() {
+      if (fontPlusBtn) fontPlusBtn.disabled = getPolicyFontSize() >= currentMaxPolicyFontSize;
+      if (headerPlusBtn) headerPlusBtn.disabled = getHeaderFontSize() >= currentMaxHeaderFontSize;
+    }
 
+    function bumpPolicy(delta) {
+      policyAutoFit = false;
+      const max = computeCorrectedMaxPolicyFontSize();
+      const desired = getPolicyFontSize() + delta;
 
-    function getSelectedPresetKey() {
-      const r = presetRadios.find(r => r.checked);
-      return r ? r.value : "";
+      if (delta > 0) {
+        setPolicyFontSize(Math.min(desired, max), max);
+      } else {
+        setPolicyFontSize(desired, max);
+      }
+      renderAll();
+    }
+
+    function bumpHeader(delta) {
+      const max = computeCorrectedMaxHeaderFontSize();
+      const desired = getHeaderFontSize() + delta;
+
+      if (delta > 0) {
+        setHeaderFontSize(Math.min(desired, max), max);
+      } else {
+        setHeaderFontSize(desired, max);
+      }
+      renderAll();
+    }
+
+    function bumpFooter(delta) {
+      setFooterFontSize(getFooterFontSize() + delta);
+      renderAll();
     }
 
     function getCurrentState() {
@@ -500,8 +732,6 @@ function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontS
       sp.set("ft", s.footerText || "");
       sp.set("ffs", String(s.footerFontSize || DEFAULT_STATE.footerFontSize));
 
-      return sp;
-
       sp.set("rc", s.roundedCorners ? "1" : "0");
 
       return sp;
@@ -539,6 +769,13 @@ function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontS
         // If the share link does not specify policy font size, auto-fit it.
         policyAutoFit = !sp.has("pfs");
         applyState(s);
+
+        // If the share link does not specify heading font size, default to 80% of the maximum that fits.
+        if (!sp.has("hfs")) {
+          const _maxHeaderDefault = computeCorrectedMaxHeaderFontSize();
+          setHeaderFontSize(Math.max(10, Math.floor(_maxHeaderDefault * 0.8)), _maxHeaderDefault);
+          renderAll();
+        }
       }
     }
     // -----------------------
@@ -601,10 +838,12 @@ function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontS
     // -----------------------
     // Auto-fit policy text size
     // -----------------------
+    
     function computeMaxPolicyFontSize() {
       const W = STICKER_W;
       const H = STICKER_H;
 
+      // Geometry mirrors drawSticker() so that "fits" matches actual rendering.
       const sepW = Math.max(4, Math.round(W * 0.003));
       const border = 0;
 
@@ -619,40 +858,131 @@ function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontS
       const noTextW = textAreaW - padOuter - padSep;
       const yesTextW = textAreaW - padOuter - padSep;
 
-      const hasTitle = showHeader.checked && headerTextInput.value.trim().length > 0;
+      const hasTitle = hasInImageTitle();
 
       const clipTop = border + (hasTitle ? Math.round(H * 0.26) : Math.round(H * 0.12));
       const clipBottom = border + innerH - Math.round(H * 0.08);
       const clipH = Math.max(0, clipBottom - clipTop);
+
+      const yMid = border + innerH / 2;
 
       function fits(fontSize) {
         const lineGap = Math.round(fontSize * 0.18);
         const lh = fontSize + lineGap;
         if (lh <= 0) return false;
 
-        const maxLines = Math.max(0, Math.floor(clipH / lh));
+        // Wrap text at this font size
+        const noLines = wrapTextNoLimit(fitCtx, noInput.value, noTextW, fontSize);
+        const yesLines = wrapTextNoLimit(fitCtx, yesInput.value, yesTextW, fontSize);
 
-        const noLines = wrapTextNoLimit(ctx, noInput.value, noTextW, fontSize);
-        const yesLines = wrapTextNoLimit(ctx, yesInput.value, yesTextW, fontSize);
+        // Match drawSticker() vertical centring logic
+        const maxLinesClip = Math.max(0, Math.floor(clipH / lh));
 
-        if (noLines.length > maxLines || yesLines.length > maxLines) return false;
+        function computeDrawY(lineCount) {
+          const visibleLines = Math.min(lineCount, maxLinesClip);
+          const visibleH = visibleLines * lh;
+          let y = yMid - (visibleH / 2);
+          y = Math.max(clipTop, Math.min(y, clipBottom - visibleH));
+          return y;
+        }
 
-        // Horizontal safety check (should already be satisfied by wrapping)
-        ctx.font = `bold ${fontSize}px Arial`;
-        for (const ln of noLines) if (ctx.measureText(ln).width > noTextW + 0.5) return false;
-        for (const ln of yesLines) if (ctx.measureText(ln).width > yesTextW + 0.5) return false;
+        const noDrawY = computeDrawY(noLines.length);
+        const yesDrawY = computeDrawY(yesLines.length);
+
+        const noAvailH = (clipTop + clipH) - noDrawY;
+        const yesAvailH = (clipTop + clipH) - yesDrawY;
+
+        const noMaxLinesFit = Math.max(0, Math.floor(noAvailH / lh));
+        const yesMaxLinesFit = Math.max(0, Math.floor(yesAvailH / lh));
+
+        if (noLines.length > noMaxLinesFit) return false;
+        if (yesLines.length > yesMaxLinesFit) return false;
+
+        // Horizontal safety check
+        fitCtx.font = `bold ${fontSize}px Arial`;
+        for (const ln of noLines) if (fitCtx.measureText(ln).width > noTextW + 0.5) return false;
+        for (const ln of yesLines) if (fitCtx.measureText(ln).width > yesTextW + 0.5) return false;
 
         return true;
       }
 
-      // Find the largest font size that allows BOTH sides to fit.
-      for (let fs = 140; fs >= 10; fs--) {
-        if (fits(fs)) return fs;
+      // Binary search for the largest font size that fits.
+      let lo = 10, hi = 140, best = 10;
+      while (lo <= hi) {
+        const mid = Math.floor((lo + hi) / 2);
+        if (fits(mid)) { best = mid; lo = mid + 1; }
+        else { hi = mid - 1; }
       }
-      return 10;
+      return best;
     }
 
-    function drawTextBlockClipped(opts) {
+    
+    function computeMaxHeaderFontSize() {
+      const hasTitle = hasInImageTitle();
+      if (!hasTitle) return 140;
+
+      const W = STICKER_W;
+      const H = STICKER_H;
+
+      const labelBlockW = Math.round(W * 0.16);
+      const titleAreaW = W - 2 * labelBlockW;
+      const titleAreaH = Math.round(H * 0.20);
+
+      const title = headerTextInput.value.trim();
+
+      function fits(hfs) {
+        let titleSize = Math.round(hfs * 0.65);
+        titleSize = Math.max(16, Math.min(titleSize, 140));
+
+        // Height constraint mirrors drawSticker()
+        if (titleSize > titleAreaH * 0.78) return false;
+
+        fitCtx.font = `600 ${titleSize}px Arial`;
+        const spacingPx = getTitleSpacingPxGlobal(titleSize);
+
+        // Width constraint mirrors drawSticker()
+        return measureSpacedTextGlobal(fitCtx, title, spacingPx) <= titleAreaW * 0.94;
+      }
+
+      // Binary search for max hfs that fits.
+      let lo = 10, hi = 140, best = 10;
+      while (lo <= hi) {
+        const mid = Math.floor((lo + hi) / 2);
+        if (fits(mid)) { best = mid; lo = mid + 1; }
+        else { hi = mid - 1; }
+      }
+      return best;
+    }
+
+
+    
+    function computeCorrectedMaxHeaderFontSize() {
+      const hasTitle = hasInImageTitle();
+      const title = hasTitle ? headerTextInput.value.trim() : "";
+      const key = hasTitle ? (`1|${fnv1a(title)}`) : "0";
+
+      if (_maxCache.headerKey === key) return _maxCache.headerVal;
+
+      const val = computeMaxHeaderFontSize();
+      _maxCache.headerKey = key;
+      _maxCache.headerVal = val;
+      return val;
+    }
+
+    
+    function computeCorrectedMaxPolicyFontSize() {
+      const hasTitle = hasInImageTitle();
+      const key = `${fnv1a(noInput.value)}|${fnv1a(yesInput.value)}|${hasTitle ? 1 : 0}`;
+
+      if (_maxCache.policyKey === key) return _maxCache.policyVal;
+
+      const val = computeMaxPolicyFontSize();
+      _maxCache.policyKey = key;
+      _maxCache.policyVal = val;
+      return val;
+    }
+
+function drawTextBlockClipped(opts) {
       const { ctx, text, x, y, w, h, fontSize, lineGap, align, fillStyle } = opts;
       const clipY = y;
       const drawY = (typeof opts.drawY === "number") ? opts.drawY : y;
@@ -735,7 +1065,22 @@ function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontS
       return { overflow };
     }
 
-    function drawFooterBand(ctx, W, footerH, yOffset, text, fontSizeFixed) {
+    function computeFooterHeight(text, fontSize) {
+      const W = STICKER_W;
+      const padX = Math.round(W * 0.04);
+      const maxW = Math.max(0, W - 2 * padX);
+
+      const lineGap = Math.round(fontSize * 0.22);
+      const lh = fontSize + lineGap;
+
+      const lines = wrapTextNoLimit(ctx, text || "", maxW, fontSize);
+      const padY = Math.max(14, Math.round(fontSize * 0.55));
+
+      const h = padY * 2 + lines.length * lh;
+      return Math.max(FOOTER_MIN_H, Math.ceil(h));
+    }
+
+    function drawFooterBandWrapped(ctx, W, footerH, yOffset, text, fontSizeFixed) {
       ctx.fillStyle = COLORS.footerBg;
       ctx.fillRect(0, yOffset, W, footerH);
 
@@ -744,19 +1089,34 @@ function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontS
       ctx.rect(0, yOffset, W, footerH);
       ctx.clip();
 
+      const padX = Math.round(W * 0.04);
+      const maxW = Math.max(0, W - 2 * padX);
+
       ctx.font = `bold ${fontSizeFixed}px Arial`;
       ctx.fillStyle = COLORS.footerText;
       ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(text, W / 2, yOffset + footerH / 2);
+      ctx.textBaseline = "top";
 
-      const overflow = ctx.measureText(text).width > W * 0.92;
+      const lineGap = Math.round(fontSizeFixed * 0.22);
+      const lh = fontSizeFixed + lineGap;
+
+      const lines = wrapTextNoLimit(ctx, text || "", maxW, fontSizeFixed).map(s => (s || "").trim());
+      const textH = lines.length * lh;
+
+      const minPadY = Math.max(14, Math.round(fontSizeFixed * 0.55));
+      let y = yOffset + Math.max(minPadY, (footerH - textH) / 2);
+
+      for (const line of lines) {
+        ctx.fillText(line, W / 2, y);
+        y += lh;
+      }
 
       ctx.restore();
-      return { overflow };
+      return { overflow: false };
     }
 
-    function drawSticker(ctx, W, H, policyFontSize) {
+
+    function drawSticker(ctx, W, H, policyFontSize, headerFontSize) {
       // Center separator: thinner and less dominant
       const sepW = Math.max(4, Math.round(W * 0.003));
 
@@ -851,23 +1211,19 @@ function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontS
           ctx.textAlign = prevAlign;
         }
 
-        let titleSize = Math.round(getHeaderFontSize() * 0.65);
-        titleSize = Math.max(16, Math.min(titleSize, 36));
+        let titleSize = Math.round(headerFontSize * 0.65);
+        titleSize = Math.max(16, Math.min(titleSize, 140));
 
         // Increase letter spacing and scale it with font size (clamped)
         const getTitleSpacingPx = (sizePx) => Math.max(4, Math.min(10, Math.round(sizePx * 0.14)));
 
-        while (titleSize > 16) {
-          ctx.font = `600 ${titleSize}px Arial`;
-          const spacingPx = getTitleSpacingPx(titleSize);
-          if (measureSpacedText(ctx, title, spacingPx) <= titleAreaW * 0.94) break;
-          titleSize -= 1;
-        }
         ctx.font = `600 ${titleSize}px Arial`;
         const titleSpacingPx = getTitleSpacingPx(titleSize);
-        titleOverflow = measureSpacedText(ctx, title, titleSpacingPx) > titleAreaW * 0.94;
 
-        ctx.fillStyle = COLORS.titleText;
+        const tooWide = measureSpacedText(ctx, title, titleSpacingPx) > titleAreaW * 0.94;
+        const tooTall = titleSize > titleAreaH * 0.78;
+        titleOverflow = (tooWide || tooTall);
+ctx.fillStyle = COLORS.titleText;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         drawCenteredSpacedText(ctx, title, titleAreaX + titleAreaW / 2, titleAreaY + titleAreaH / 2, titleSpacingPx);
@@ -936,14 +1292,15 @@ function getPolicyFontSize() { return clamp(parseIntOr(DEFAULT_STATE.policyFontS
         fillStyle: COLORS.text
       }).overflow;
 
-return { overflow: (noOverflow || yesOverflow || titleOverflow) };
+return { overflow: (noOverflow || yesOverflow || titleOverflow), noOverflow, yesOverflow, titleOverflow };
     }
 
     function setCanvasSizeAndRender() {
       const hasFooter = showFooter.checked;
+      const footerH = hasFooter ? computeFooterHeight(footerTextInput.value, getFooterFontSize()) : 0;
 
       // The header text is rendered inside the main image (sticker), so we do not add an extra header band height.
-      const totalH = STICKER_H + (hasFooter ? FOOTER_H : 0);
+      const totalH = STICKER_H + footerH;
       canvas.width = STICKER_W;
       canvas.height = totalH;
 
@@ -960,18 +1317,32 @@ return { overflow: (noOverflow || yesOverflow || titleOverflow) };
 
       let overflow = false;
 
-      const stickerOverflow = drawSticker(ctx, STICKER_W, STICKER_H, getPolicyFontSize());
+      const stickerOverflow = drawSticker(ctx, STICKER_W, STICKER_H, getPolicyFontSize(), getHeaderFontSize());
       overflow = overflow || stickerOverflow.overflow;
 
       if (hasFooter) {
-        const footerOverflow = drawFooterBand(ctx, STICKER_W, FOOTER_H, STICKER_H, footerTextInput.value, getFooterFontSize());
+        const footerOverflow = drawFooterBandWrapped(ctx, STICKER_W, footerH, STICKER_H, footerTextInput.value, getFooterFontSize());
         overflow = overflow || footerOverflow.overflow;
       }
 
-      if (useRounded) ctx.restore();
+      if (useRounded) {
+        ctx.restore();
+
+        // Hard mask to guarantee that the cut-out corner areas are transparent in the PNG export.
+        // (Some viewers display transparency as white; this ensures the alpha channel is present.)
+        ctx.save();
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.fillStyle = "#000";
+        pathRoundRect(ctx, 0, 0, canvas.width, canvas.height, cornerR);
+        ctx.fill();
+        ctx.restore();
+      }
 
       overflowWarning.style.display = overflow ? "block" : "none";
+      return { overflow, stickerOverflow };
     }
+
+
 
     // -----------------------
     // Defaults
@@ -995,7 +1366,10 @@ return { overflow: (noOverflow || yesOverflow || titleOverflow) };
 
       showHeader.checked = DEFAULT_STATE.showHeader;
       headerTextInput.value = DEFAULT_STATE.headerText;
-      setHeaderFontSize(DEFAULT_STATE.headerFontSize);
+
+      // Default: 80% of the maximum heading size that fits in the image
+      const _maxHeaderDefault = computeCorrectedMaxHeaderFontSize();
+      setHeaderFontSize(Math.max(10, Math.floor(_maxHeaderDefault * 0.8)), _maxHeaderDefault);
 
       showFooter.checked = DEFAULT_STATE.showFooter;
       footerTextInput.value = DEFAULT_STATE.footerText;
@@ -1004,39 +1378,136 @@ return { overflow: (noOverflow || yesOverflow || titleOverflow) };
 
       if (roundedCorners) roundedCorners.checked = DEFAULT_STATE.roundedCorners;
 
-      // Maximise policy text size by default (until the user overrides it)
-      setPolicyFontSize(computeMaxPolicyFontSize());
+      // Default: 95% of the maximum policy text size that fits in the image (until the user overrides it)
+      const _maxPolicyDefault = computeCorrectedMaxPolicyFontSize();
+      setPolicyFontSize(Math.max(10, Math.floor(_maxPolicyDefault * 0.95)), _maxPolicyDefault);
 
-      setCanvasSizeAndRender();
+      renderAll();
     }
 
-    function renderAll() { if (policyAutoFit) setPolicyFontSize(computeMaxPolicyFontSize()); setCanvasSizeAndRender(); }
+        function renderAll() {
+      const maxHeader = computeCorrectedMaxHeaderFontSize();
+      const maxPolicy = computeCorrectedMaxPolicyFontSize();
+
+      currentMaxPolicyFontSize = maxPolicy;
+      currentMaxHeaderFontSize = maxHeader;
+
+      let clampedPolicy = false;
+      let clampedHeader = false;
+
+      if (policyAutoFit) {
+        const target = Math.max(10, Math.floor(maxPolicy * 0.95));
+        setPolicyFontSize(target, maxPolicy);
+      } else if (getPolicyFontSize() > maxPolicy) {
+        setPolicyFontSize(maxPolicy, maxPolicy);
+        clampedPolicy = true;
+      }
+
+      if (getHeaderFontSize() > maxHeader) {
+        setHeaderFontSize(maxHeader, maxHeader);
+        clampedHeader = true;
+      }
+
+      if (clampedPolicy && clampedHeader) {
+        showSizeLimitMessage("Heading and policy text sizes were reduced to fit in the image.");
+      } else if (clampedPolicy) {
+        showSizeLimitMessage("Policy text size was reduced to fit in the image.");
+      } else if (clampedHeader) {
+        showSizeLimitMessage("Heading text size was reduced to fit in the image.");
+      } else {
+        refreshSizeLimitMessage(maxPolicy, maxHeader);
+      }
+
+      updateTextSizeStepperStates();
+      setCanvasSizeAndRender();
+    }
 
     // -----------------------
     // Export / clipboard
     // -----------------------
-    function downloadPNG() {
-      const a = document.createElement("a");
-      a.download = "my-review-policy.png";
-      a.href = canvas.toDataURL("image/png");
-      a.click();
+    function canvasToBlob(type = "image/png", quality) {
+      return new Promise((resolve) => {
+        try {
+          canvas.toBlob((b) => resolve(b), type, quality);
+        } catch (e) {
+          console.error(e);
+          resolve(null);
+        }
+      });
+    }
+
+    async function downloadPNG() {
+      // Prefer Blob/ObjectURL (more robust than data: URLs across browsers)
+      try {
+        const blob = await canvasToBlob("image/png");
+        if (!blob) throw new Error("Could not create image blob.");
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.download = "my-review-policy.png";
+        a.href = url;
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        // Revoke after click has been dispatched
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        return;
+      } catch (e) {
+        console.error(e);
+      }
+
+      // Fallback: data URL
+      try {
+        const a = document.createElement("a");
+        a.download = "my-review-policy.png";
+        a.href = canvas.toDataURL("image/png");
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } catch (e) {
+        console.error(e);
+        alert("Download failed in this browser context. Try opening the page via HTTPS (e.g., GitHub Pages) and try again.");
+      }
+    }
+
+    function openPNGInNewTab() {
+      try {
+        const url = canvas.toDataURL("image/png");
+        window.open(url, "_blank", "noopener,noreferrer");
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     async function copyImage() {
+      // Clipboard image write requires a secure context (HTTPS / localhost) in most browsers.
+      if (!window.isSecureContext) {
+        alert("Copy image requires a secure context (HTTPS). Use “Download PNG” instead.");
+        return;
+      }
+
       try {
         if (!navigator.clipboard || !window.ClipboardItem) {
-          alert("Clipboard image copy is not supported in this browser.");
+          alert("Clipboard image copy is not supported in this browser. Use “Download PNG” instead.");
           return;
         }
-        const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-        if (!blob) { alert("Could not create image blob."); return; }
+
+        const blob = await canvasToBlob("image/png");
+        if (!blob) { alert("Could not create image blob. Use “Download PNG” instead."); return; }
+
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
         alert("Image copied to clipboard.");
       } catch (e) {
         console.error(e);
-        alert("Copy failed.");
+        // As a practical fallback, open the PNG in a new tab so users can use browser-native copy/save.
+        openPNGInNewTab();
+        alert("Copy failed. I opened the PNG in a new tab as a fallback (you can copy/save from there).");
       }
     }
+
 
     async function copyLinkRobust() {
       const base = (window.location.origin && window.location.origin !== "null")
@@ -1079,22 +1550,45 @@ try {
     function onAnyChange() { renderAll(); }
 
     presetRadios.forEach(radio => {
-      radio.addEventListener("change", () => { applyPresetKey(radio.value); onAnyChange(); });
+      radio.addEventListener("change", () => { applyPresetKey(radio.value); clearSizeLimitMessage(); onAnyChange(); });
     });
 
-    noInput.addEventListener("input", onAnyChange);
-    yesInput.addEventListener("input", onAnyChange);
+    noInput.addEventListener("input", () => { clearSizeLimitMessage(); onAnyChange(); });
+    yesInput.addEventListener("input", () => { clearSizeLimitMessage(); onAnyChange(); });
 
-    showHeader.addEventListener("change", onAnyChange);
-    headerTextInput.addEventListener("input", onAnyChange);
+    showHeader.addEventListener("change", () => { clearSizeLimitMessage(); onAnyChange(); });
+    headerTextInput.addEventListener("input", () => { clearSizeLimitMessage(); onAnyChange(); });
 
-    showFooter.addEventListener("change", onAnyChange);
-    footerTextInput.addEventListener("input", onAnyChange);
+    showFooter.addEventListener("change", () => { clearSizeLimitMessage(); onAnyChange(); });
+    footerTextInput.addEventListener("input", () => { clearSizeLimitMessage(); onAnyChange(); });
 
-    if (roundedCorners) roundedCorners.addEventListener("change", onAnyChange);
+    if (roundedCorners) roundedCorners.addEventListener("change", () => { clearSizeLimitMessage(); onAnyChange(); });
 
-    baseFontSizeInput.addEventListener("input", () => { policyAutoFit = false; setPolicyFontSize(getPolicyFontSize()); onAnyChange(); });
-    headerFontSizeInput.addEventListener("input", () => { setHeaderFontSize(getHeaderFontSize()); onAnyChange(); });
+    baseFontSizeInput.addEventListener("input", () => {
+      policyAutoFit = false;
+      const desired = getPolicyFontSize();
+      const max = computeCorrectedMaxPolicyFontSize();
+      if (desired > max) {
+        setPolicyFontSize(max, max);
+        showSizeLimitMessage("Policy text size cannot be increased further because it would not fit in the image.");
+      } else {
+        setPolicyFontSize(desired, max);
+        clearSizeLimitMessage();
+      }
+      onAnyChange();
+    });
+    headerFontSizeInput.addEventListener("input", () => {
+      const desired = getHeaderFontSize();
+      const max = computeCorrectedMaxHeaderFontSize();
+      if (desired > max) {
+        setHeaderFontSize(max, max);
+        showSizeLimitMessage("Heading text size cannot be increased further because it would not fit in the image.");
+      } else {
+        setHeaderFontSize(desired, max);
+        clearSizeLimitMessage();
+      }
+      onAnyChange();
+    });
     footerFontSizeInput.addEventListener("input", () => { setFooterFontSize(getFooterFontSize()); onAnyChange(); });
 
     fontPlusBtn.addEventListener("click", () => bumpPolicy(+2));
@@ -1111,10 +1605,26 @@ try {
     copyLinkBtn.addEventListener("click", copyLinkRobust);
     clearBtn.addEventListener("click", setDefaults);
 
+
+
+// Lightbox events (guarded)
+if (lightbox && lightboxBackdrop && lightboxClose && lightboxImg) {
+  canvas.addEventListener("click", openLightbox);
+  lightboxBackdrop.addEventListener("click", closeLightbox);
+  lightboxClose.addEventListener("click", closeLightbox);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lightbox.classList.contains("open")) closeLightbox();
+  });
+}
+
     window.addEventListener("resize", setCanvasSizeAndRender);
 
-    // Init: always reset to defaults on reload
+    // Init: defaults, then share-link state, then a couple of re-renders for mobile Chrome
     setDefaults();
+    applyStateFromQuery();
+    requestAnimationFrame(renderAll);
+    setTimeout(renderAll, 50);
+    window.addEventListener("load", () => { requestAnimationFrame(renderAll); });
 
     // Wire the "read more" link for GitHub Pages
     if (readMoreLink) {
@@ -1122,8 +1632,16 @@ try {
       readMoreLink.textContent = READ_MORE_URL;
     }
 
-    // If the page was opened with a share link, apply it on top of defaults
-    applyStateFromQuery();
+    // Share-link state is applied during init above.
   </script>
+
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+  <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Enlarged image preview">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">×</button>
+    <img class="lightbox-img" id="lightboxImg" alt="Enlarged preview" />
+  </div>
+</div>
 </body>
 </html>
