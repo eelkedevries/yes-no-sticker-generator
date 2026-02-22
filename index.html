@@ -489,8 +489,7 @@
     // DOM
     // -----------------------
     const canvas = document.getElementById("c");
-    const ctx = canvas.getContext("2d");
-
+    const ctx = canvas ? canvas.getContext("2d") : null;
     // Offscreen canvas for robust "fit" checks (prevents font-size controls from exceeding available space)
     const fitCanvas = document.createElement("canvas");
     fitCanvas.width = STICKER_W;
@@ -611,4 +610,4 @@ function closeLightbox() {
 
       if (atPolicyMax && atHeaderMax) {
         showSizeLimitMessage("Heading and policy text sizes cannot be increased further because they would not fit in the image.");
-        return;
+ 
