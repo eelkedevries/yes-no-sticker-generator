@@ -1,110 +1,310 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>My review policy</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta name="robots" content="noindex" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <meta name="description" content="Compose a concise personal peer-review policy and export it as a shareable image — a practical response to mass review invitations and publishers you do not wish to support." />
+  <!-- Fonts load asynchronously (media swap) so a slow or unreachable font CDN
+       can never delay the page or the image generator. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Lexend:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    media="print"
+    onload="this.media='all'"
+  />
+  <noscript>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Lexend:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    />
+  </noscript>
+  <!-- Open Graph / Twitter: rich preview when the page URL is shared (independent of noindex). -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="My review policy" />
+  <meta property="og:title" content="My review policy" />
+  <meta property="og:description" content="Compose a concise personal peer-review policy and export it as a shareable image." />
+  <meta property="og:url" content="https://eelkedevries.com/my-review-policy/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="My review policy" />
+  <meta name="twitter:description" content="Compose a concise personal peer-review policy and export it as a shareable image." />
+  <title>My review policy — Eelke de Vries</title>
   <style>
-    body { font-family: Arial, Helvetica, sans-serif; margin: 24px; color: #111; background: #fff; }
-    .wrap { max-width: 1080px; }
+    /* Cosmic theme, matching eelkedevries.com: a near-black canvas with a faint
+       starfield, gold and iris-blue accents, Spectral for display text, Lexend
+       for UI text, JetBrains Mono for meta and labels. The exported image
+       itself deliberately keeps its own palette and Arial lettering — only the
+       page around it is themed. */
 
-.intro-panel { padding: 16px 16px 10px 16px; }
-.intro-heading { font-size: 28px; margin: 0 0 10px 0; }
-.section-heading { font-size: 20px; margin: 0 0 12px 0; }
-
-    h1 { font-size: 28px; margin: 0 0 10px 0; }
-    h2 { font-size: 20px; margin: 20px 0 10px 0; }
-    .subtext {
-      margin: 0 0 14px 0;
-      line-height: 1.45;
-      font-size: 14px;
-      color: #222;
-      max-width: 1000px;
+    :root {
+      color-scheme: dark;
+      --bg: #0a0a0f;
+      --surface: #15151c;
+      --inset: #101017;
+      --text: #eae7e1;
+      --text-bright: #f4f1ea;
+      --muted: #9a9aa4;
+      /* AA-contrast (>=4.5:1 on the dark surfaces); stays below --muted for hierarchy. */
+      --faint: #8f8f9b;
+      --accent: #e8b43a;
+      --iris: #6ba6e4;
+      --link: #7fb4ec;
+      --link-hover: #a9cdf5;
+      --soft-iris: rgba(107, 166, 228, 0.14);
+      --line: #2a2a35;
+      --line-2: #3a3a47;
+      --error: #e57a7a;
+      --serif: 'Spectral', Georgia, 'Times New Roman', serif;
+      --mono: 'JetBrains Mono', SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: 'Lexend', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    /* Keep scroll targets (skip link) clear of the sticky top bar. */
+    html { scroll-padding-top: 64px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    ::selection { background: var(--accent); color: #0a0a0a; }
+    :focus-visible { outline: 2px solid rgba(232, 180, 58, 0.72); outline-offset: 3px; }
+
+    /* Decorative fixed background: a faint starfield plus ambient nebula glows, as
+       on the main site. Static (no motion), so no reduced-motion guard is needed. */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(1.4px 1.4px at 12% 22%, rgba(255, 255, 255, 0.42), transparent),
+        radial-gradient(1px 1px at 28% 64%, rgba(255, 255, 255, 0.28), transparent),
+        radial-gradient(1.2px 1.2px at 47% 18%, rgba(255, 255, 255, 0.36), transparent),
+        radial-gradient(1px 1px at 63% 78%, rgba(255, 255, 255, 0.24), transparent),
+        radial-gradient(1.5px 1.5px at 78% 34%, rgba(232, 180, 58, 0.4), transparent),
+        radial-gradient(1px 1px at 88% 58%, rgba(255, 255, 255, 0.28), transparent),
+        radial-gradient(1px 1px at 36% 88%, rgba(255, 255, 255, 0.22), transparent),
+        radial-gradient(1.2px 1.2px at 6% 76%, rgba(107, 166, 228, 0.34), transparent),
+        radial-gradient(1px 1px at 55% 44%, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(1px 1px at 92% 12%, rgba(255, 255, 255, 0.26), transparent),
+        radial-gradient(1100px 560px at 80% -10%, rgba(232, 180, 58, 0.07), transparent 62%),
+        radial-gradient(820px 480px at 70% 0%, rgba(107, 166, 228, 0.05), transparent 58%),
+        radial-gradient(900px 700px at 12% 108%, rgba(107, 166, 228, 0.04), transparent 60%);
+    }
+
+    /* Keep all real content above the decorative layer. */
+    .topbar, .wrap, .site-footer { position: relative; z-index: 1; }
+
+    /* Skip link: visually hidden until focused, then revealed top-left. */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 100;
+      padding: 10px 18px;
+      background: var(--accent);
+      color: #0a0a0a;
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 14px;
+      text-decoration: none;
+      border-radius: 0 0 9px 0;
+    }
+    .skip-link:focus { left: 0; }
+
+    /* Top bar: a slim masthead linking back to the main site. */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(10, 10, 15, 0.74);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 14px 34px -26px rgba(0, 0, 0, 0.9);
+    }
+    .topbar::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232, 180, 58, 0.5) 30%, rgba(107, 166, 228, 0.45) 62%, transparent);
+    }
+    .topbar__inner { max-width: 1080px; margin: 0 auto; padding: 13px 24px; display: flex; align-items: baseline; gap: 10px; }
+    .topbar__home { font-weight: 600; font-size: 15px; color: var(--text-bright); text-decoration: none; white-space: nowrap; }
+    .topbar__home:hover { color: var(--accent); }
+    .topbar__sep { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    .topbar__here { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--accent); }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 24px 64px; }
+
+    /* Page header */
+    .page-head { margin-bottom: 28px; }
+    .kicker {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 18px;
+    }
+    h1.intro-heading {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(30px, 4.2vw, 42px);
+      line-height: 1.06;
+      letter-spacing: -0.015em;
+      color: var(--text);
+      text-wrap: balance;
+      margin: 0 0 12px;
+    }
+    .subtext {
+      margin: 0;
+      line-height: 1.7;
+      font-size: 15.5px;
+      color: rgba(234, 231, 225, 0.88);
+      max-width: 92ch;
+    }
+    .subtext strong { font-weight: 500; color: var(--accent); }
+    .subtext a { color: var(--link); text-decoration: none; border-bottom: 1px solid rgba(127, 180, 236, 0.38); transition: color 0.15s, border-color 0.15s; }
+    .subtext a:hover { color: var(--link-hover); border-color: rgba(127, 180, 236, 0.7); }
 
     .iconbar { display: inline-flex; gap: 10px; vertical-align: middle; margin-left: 6px; }
-    .iconlink { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; }
-    .iconlink svg { width: 20px; height: 20px; display: block; }
-
-    .panel {
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 14px 14px 6px 14px;
-      background: #f7f8fa;
-      margin: 10px 0 16px 0;
+    .iconlink {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      color: var(--muted);
+      border-bottom: 0;
+      transition: color 0.15s, transform 0.15s;
     }
-    .panel-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin: 0 0 10px 0;
-      color: #111;
+    .subtext a.iconlink { border-bottom: 0; }
+    .iconlink:hover { color: var(--accent); transform: translateY(-1px); }
+    .iconlink svg { width: 20px; height: 20px; display: block; fill: currentColor; }
+
+    /* Cards */
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px 22px 16px;
+      background: var(--surface);
+      margin: 0 0 16px;
+    }
+    .section-heading {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 14px;
     }
 
     .subsection {
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid #e6e6e6;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
     }
     .subheading {
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0 0 10px 0;
-      color: #111;
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 12px;
     }
-
 
     .row { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; align-items: flex-start; }
     .col { flex: 1 1 420px; }
 
-    label { display: block; font-size: 14px; margin-bottom: 6px; }
+    label {
+      display: block;
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
     input[type="text"], textarea, select {
       width: 100%;
       padding: 10px 12px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #fff;
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--text);
+      border: 1px solid var(--line-2);
+      border-radius: 9px;
+      background: var(--inset);
       box-sizing: border-box;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input[type="text"]::placeholder, textarea::placeholder { color: var(--faint); }
+    input[type="text"]:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--iris);
+      box-shadow: 0 0 0 3px var(--soft-iris);
     }
     textarea { resize: vertical; min-height: 90px; }
-
-    .radio-group { display: grid; gap: 8px; margin-top: 8px; }
-    @media (min-width: 900px) {
-      .radio-group { grid-template-columns: 1fr 1fr; }
-    }
-
-    .radio-item {
-      display: flex; gap: 10px; align-items: flex-start;
-      padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: #fff;
-    }
-    .radio-item input[type="radio"] { margin-top: 3px; transform: scale(1.05); }
-    .radio-label { display: grid; gap: 2px; }
-    .radio-name { font-weight: 700; font-size: 14px; color: #111; }
-    .radio-pair { font-size: 13px; color: #333; line-height: 1.35; }
 
     .option-row {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      margin: 8px 0;
+      margin: 12px 0 8px;
     }
-    .option-row input[type="checkbox"] { transform: translateY(1px); }
+    .option-row input[type="checkbox"] { transform: translateY(1px); accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
+    .option-row > label { margin-bottom: 0; cursor: pointer; }
 
     .font-control {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      background: #fafafa;
+      padding: 10px 12px;
+      border: 1px solid var(--line-2);
+      border-radius: 10px;
+      background: var(--inset);
     }
-    .font-control .label { font-size: 14px; font-weight: 700; color: #111; }
-    .font-size-box {
+    .font-control .label {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    /* The attribute selector above would otherwise win and stretch/shrink the
+       box with the flex row; pin the stepper inputs at a fixed width. */
+    input[type="text"].font-size-box {
       width: 70px;
+      flex: 0 0 auto;
       text-align: center;
-      font-size: 16px;
+      font-family: var(--mono);
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
     }
     .stepper {
       display: inline-flex;
@@ -115,13 +315,18 @@
       width: 36px;
       height: 32px;
       padding: 0;
-      font-size: 18px;
+      font-family: var(--mono);
+      font-size: 17px;
       line-height: 1;
-      border: 1px solid #ccc;
+      color: var(--text);
+      border: 1px solid var(--line-2);
       border-radius: 8px;
-      background: #fff;
+      background: transparent;
       cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
     }
+    .stepper button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .stepper button:disabled { opacity: 0.45; cursor: not-allowed; }
     .stepper button:active { transform: translateY(1px); }
 
     .adjusters-row {
@@ -134,136 +339,202 @@
     }
 
     .actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding-bottom: 6px;
-  margin: 10px 0 0 0;
-}
-    button.action {
-  padding: 8px 10px;
-  font-size: 14px;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #fff;
-  white-space: nowrap;
-}
-    button.action:active { transform: translateY(1px); }
-
-    .option-row {
-      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin: 14px 0 0 0;
     }
+    button.action {
+      padding: 9px 16px;
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--text);
+      border: 1px solid var(--line-2);
+      border-radius: 9px;
+      background: transparent;
+      white-space: nowrap;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    button.action:hover { border-color: var(--iris); color: var(--iris); background: rgba(107, 166, 228, 0.08); }
+    button.action:active { transform: translateY(1px); }
+    /* Primary export action: gold, matching the main site's buttons. */
+    button.action#downloadBtn {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0a0a0a;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+    button.action#downloadBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px -16px rgba(232, 180, 58, 0.6);
+    }
+
     label.check {
       display: inline-flex;
       gap: 10px;
       align-items: center;
+      font-family: var(--sans);
+      font-weight: 300;
       font-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--text);
       user-select: none;
       cursor: pointer;
+      margin-bottom: 0;
     }
     label.check input {
       width: 16px;
       height: 16px;
+      accent-color: var(--accent);
     }
-
-
-    .divider { height: 1px; background: #eee; margin: 14px 0; }
 
     .warning {
       display: none;
-      border: 1px solid #d22;
-      background: #fff5f5;
-      color: #7a0a0a;
+      border: 1px solid rgba(229, 122, 122, 0.45);
+      background: rgba(229, 122, 122, 0.1);
+      color: #efaeae;
       padding: 10px 12px;
       border-radius: 10px;
       font-size: 14px;
       margin: 10px 0 12px 0;
-      line-height: 1.35;
+      line-height: 1.5;
     }
 
-    canvas { width: 100%; border: 1px solid #ddd; border-radius: 0; display: block; background: transparent; }
+    canvas { width: 100%; border: 1px solid var(--line-2); border-radius: 0; display: block; background: transparent; }
     canvas.rc-on { border-radius: 12px; }
 
     .inline-grow { flex: 1 1 520px; min-width: 260px; }
-.hidden { display: none !important; }
+    .hidden { display: none !important; }
 
-/* Click-to-enlarge for the current image preview */
-#imagePanel canvas { cursor: zoom-in; }
+    /* Click-to-enlarge for the current image preview */
+    #imagePanel canvas { cursor: zoom-in; }
 
-/* Policy font control: label above input/stepper */
-.font-control.policy { flex-direction: column; align-items: flex-start; gap: 6px; }
-.font-control.policy .font-row { display: inline-flex; align-items: center; gap: 10px; }
+    /* Policy font control: label above input/stepper */
+    .font-control.policy { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .font-control.policy .font-row { display: inline-flex; align-items: center; gap: 10px; }
 
-/* Header/Footer font controls: label above input/stepper */
-.font-control.stacked { flex-direction: column; align-items: flex-start; gap: 6px; }
-.font-control.stacked .font-row { display: inline-flex; align-items: center; gap: 10px; }
+    /* Header/Footer font controls: label above input/stepper */
+    .font-control.stacked { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .font-control.stacked .font-row { display: inline-flex; align-items: center; gap: 10px; }
 
-/* In-page image lightbox (modal overlay) */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.65);
-  z-index: 9999;
-  padding: 24px;
-}
-.lightbox.open { display: flex; }
-.lightbox-inner { position: relative; width: 96vw; max-width: 1400px; }
-.lightbox-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: transparent;
-}
-.lightbox-close {
-  position: absolute;
-  top: -12px;
-  right: -12px;
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
-  font-size: 26px;
-  line-height: 1;
-  cursor: pointer;
-}
-.lightbox-close:active { transform: translateY(1px); }
-body.modal-open { overflow: hidden; }
+    /* In-page image lightbox (modal overlay) */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(4, 4, 8, 0.8);
+      z-index: 9999;
+      padding: 24px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner { position: relative; width: 96vw; max-width: 1400px; }
+    .lightbox-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      border: 1px solid var(--line-2);
+      background: transparent;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid var(--line-2);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .lightbox-close:hover { border-color: var(--accent); color: var(--accent); }
+    .lightbox-close:active { transform: translateY(1px); }
+    body.modal-open { overflow: hidden; }
+
+    /* Footer, matching the main site's: hairline, glowing dot, mono meta. */
+    .site-footer { position: relative; border-top: 1px solid var(--line); margin-top: 56px; }
+    .site-footer::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232, 180, 58, 0.35), transparent);
+    }
+    .footer-inner { max-width: 1080px; margin: 0 auto; padding: 26px 24px 34px; display: grid; gap: 12px; }
+    .site-footer .copy { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+    .site-footer .copy a { color: var(--link); text-decoration: none; border-bottom: 1px solid rgba(127, 180, 236, 0.38); transition: color 0.15s, border-color 0.15s; }
+    .site-footer .copy a:hover { color: var(--link-hover); border-color: rgba(127, 180, 236, 0.7); }
+    .bdot { width: 9px; height: 9px; border-radius: 50%; background: radial-gradient(circle at 38% 35%, var(--iris), #0a1a22 72%); box-shadow: 0 0 8px rgba(107, 166, 228, 0.5); flex: none; }
+    .privacy { font-family: var(--mono); font-size: 11px; color: var(--faint); line-height: 1.7; margin: 0; max-width: 72ch; }
+
+    @media (max-width: 640px) {
+      .topbar__inner { padding: 12px 18px; }
+      .wrap { padding: 30px 18px 56px; }
+      .panel { padding: 16px 16px 12px; }
+    }
+
+    /* Honour reduced-motion: shorten all transitions. */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="panel intro-panel">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="topbar__home" href="https://eelkedevries.com/">Eelke de Vries</a>
+      <span class="topbar__sep" aria-hidden="true">/</span>
+      <span class="topbar__here">My review policy</span>
+    </div>
+  </header>
+  <main class="wrap" id="main">
+    <header class="page-head">
+      <p class="kicker">Image generator</p>
       <h1 class="intro-heading">My review policy</h1>
 
       <p class="subtext">
       This YES/NO image generator helps researchers share their personal review policy in any way they want (for example, a social media post or a quick reply to unwanted review requests), including automated mass invitations, predatory journals, and high-fee for-profit publishers that rely on unpaid reviewing and often place accepted papers behind paywalls.
       <strong>#MyReviewPolicy</strong>
-      &nbsp;Read more here: <a href="#" id="readMoreLink">[link coming soon]</a>
+      &nbsp;Read more here: <a href="https://eelkedevries.com/projects.html" id="readMoreLink">https://eelkedevries.com/projects.html</a>
       <span class="iconbar" aria-label="Links">
         <a class="iconlink" href="https://www.linkedin.com/in/eelkedevries" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-            <path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.036-1.852-3.036-1.853 0-2.136 1.445-2.136 2.939v5.666H9.35V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.368-1.85 3.6 0 4.269 2.368 4.269 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.815 20.452H3.858V9h2.957v11.452z"/>
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.036-1.852-3.036-1.853 0-2.136 1.445-2.136 2.939v5.666H9.35V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.368-1.85 3.6 0 4.269 2.368 4.269 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM6.815 20.452H3.858V9h2.957v11.452z"/>
           </svg>
         </a>
         <a class="iconlink" href="https://github.com/eelkedevries/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
           <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-            <path fill="#111" d="M12 .5C5.73.5.75 5.62.75 12.05c0 5.14 3.19 9.5 7.62 11.04.56.11.77-.25.77-.56 0-.27-.01-1.17-.02-2.12-3.1.69-3.75-1.25-3.75-1.25-.5-1.33-1.23-1.68-1.23-1.68-1-.71.08-.7.08-.7 1.11.08 1.7 1.18 1.7 1.18.98 1.74 2.57 1.24 3.2.95.1-.73.38-1.24.69-1.52-2.48-.29-5.08-1.28-5.08-5.69 0-1.26.44-2.29 1.17-3.1-.12-.3-.51-1.52.11-3.16 0 0 .95-.31 3.12 1.18a10.7 10.7 0 0 1 2.84-.39c.96 0 1.93.13 2.84.39 2.17-1.49 3.12-1.18 3.12-1.18.62 1.64.23 2.86.11 3.16.73.81 1.17 1.84 1.17 3.1 0 4.42-2.61 5.39-5.1 5.68.39.35.74 1.04.74 2.11 0 1.52-.02 2.74-.02 3.11 0 .31.2.68.78.56 4.42-1.54 7.61-5.9 7.61-11.04C23.25 5.62 18.27.5 12 .5z"/>
+            <path d="M12 .5C5.73.5.75 5.62.75 12.05c0 5.14 3.19 9.5 7.62 11.04.56.11.77-.25.77-.56 0-.27-.01-1.17-.02-2.12-3.1.69-3.75-1.25-3.75-1.25-.5-1.33-1.23-1.68-1.23-1.68-1-.71.08-.7.08-.7 1.11.08 1.7 1.18 1.7 1.18.98 1.74 2.57 1.24 3.2.95.1-.73.38-1.24.69-1.52-2.48-.29-5.08-1.28-5.08-5.69 0-1.26.44-2.29 1.17-3.1-.12-.3-.51-1.52.11-3.16 0 0 .95-.31 3.12 1.18a10.7 10.7 0 0 1 2.84-.39c.96 0 1.93.13 2.84.39 2.17-1.49 3.12-1.18 3.12-1.18.62 1.64.23 2.86.11 3.16.73.81 1.17 1.84 1.17 3.1 0 4.42-2.61 5.39-5.1 5.68.39.35.74 1.04.74 2.11 0 1.52-.02 2.74-.02 3.11 0 .31.2.68.78.56 4.42-1.54 7.61-5.9 7.61-11.04C23.25 5.62 18.27.5 12 .5z"/>
           </svg>
         </a>
       </span>
       </p>
 
-    </div>
+    </header>
+
 
 <div class="panel" id="imagePanel">
       <h2 class="section-heading">Current image</h2>
@@ -293,7 +564,7 @@ body.modal-open { overflow: hidden; }
     </div>
 
 <div class="panel" id="adjustPanel">
-      <h2 class="section-heading">Personalize message</h2>
+      <h2 class="section-heading">Personalise message</h2>
 
       <div class="row">
         <div class="col">
@@ -362,7 +633,15 @@ body.modal-open { overflow: hidden; }
         </div>
       </div>
     </div>
-  </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="copy"><span class="bdot" aria-hidden="true"></span>&copy; Eelke de Vries · <a href="https://eelkedevries.com/">eelkedevries.com</a></span>
+      <p class="privacy">The image is generated locally in your browser and nothing you type is uploaded or stored — download, copy, or share it as you see fit.</p>
+    </div>
+  </footer>
+
 
   <div id="lightbox" class="lightbox" aria-hidden="true">
     <div class="lightbox-inner">
@@ -380,7 +659,7 @@ body.modal-open { overflow: hidden; }
 
 
     // Public "read more" link (update to your project page)
-    const READ_MORE_URL = "https://github.com/eelkedevries/my-review-policy";
+    const READ_MORE_URL = "https://eelkedevries.com/projects.html";
     const HEADER_H = 90;
     const FOOTER_H = 70;
 
@@ -1352,7 +1631,7 @@ window.addEventListener("keydown", (e) => {
     // Init: always reset to defaults on reload
     setDefaults();
 
-    // Wire the "read more" link for GitHub Pages
+    // Wire the "read more" link to the projects page on the main site
     if (readMoreLink) {
       readMoreLink.href = READ_MORE_URL;
       readMoreLink.textContent = READ_MORE_URL;
